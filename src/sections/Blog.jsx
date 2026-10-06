@@ -15,14 +15,13 @@ export default function Blog() {
               Yapay zeka, yazılım ve dijital dönüşüm üzerine en güncel yazılarımız.
             </p>
           </div>
-          <a href="/icerikler" className="glass-btn group shrink-0">
-            <span>
+          <a href="/icerikler" className="magnet-pill magnet-pill--soft group shrink-0">
+            <span className="magnet-pill__face">
               Tüm İçerikler
+              <svg className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+              </svg>
             </span>
-            {' '}
-            <svg className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
-            </svg>
           </a>
         </div>
         <PostRow posts={POSTS.slice(0, 3)} />

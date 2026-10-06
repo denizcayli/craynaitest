@@ -1,4 +1,6 @@
 import LiquidLogo from './LiquidLogo.jsx'
+import SocialLinks from './SocialLinks.jsx'
+import { SOCIALS } from '../data/socials.js'
 
 const COLUMNS = [
   {
@@ -58,12 +60,28 @@ export default function Footer() {
             <p className="text-sm leading-relaxed text-slate-brand">
               Şirketlere özel AI agent'lar, otomasyon sistemleri ve üretken yapay zeka yazılımları geliştiriyoruz.
             </p>
-            <a href="/talep" className="footer-cta">
-              Bize Ulaşın
-              <svg className="size-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
-              </svg>
-            </a>
+            {/* Address and number, with the social buttons beside them */}
+            <div className="flex items-center gap-5">
+              <ul className="flex flex-col gap-1 text-sm font-semibold text-graphite">
+                <li>
+                  <a href="mailto:hello@crayn.ai" className="flex items-center gap-2.5 transition-colors hover:text-[#3b5fb5]">
+                    <svg className="size-4 text-slate-brand" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M3 6h18v12H3zM3 7l9 6 9-6" />
+                    </svg>
+                    hello@crayn.ai
+                  </a>
+                </li>
+                <li>
+                  <a href="tel:05442407199" className="flex items-center gap-2.5 transition-colors hover:text-[#3b5fb5]">
+                    <svg className="size-4 text-slate-brand" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a1 1 0 01-1 1A15 15 0 014 5a1 1 0 011-1z" />
+                    </svg>
+                    0544 240 71 99
+                  </a>
+                </li>
+              </ul>
+              <SocialLinks links={SOCIALS} className="social-links--light" />
+            </div>
           </div>
           <nav aria-label="Alt menü" className="grid grid-cols-2 gap-x-10 gap-y-10 sm:grid-cols-3 lg:gap-x-24">
             {COLUMNS.map((column) => (

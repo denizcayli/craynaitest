@@ -31,11 +31,11 @@ export default function TalepContent() {
             </div>
           </div>
           <div id="talepSuccess" className="hidden text-center py-10">
-            <div className="tlp-success-icon mb-6">
-              <svg className="w-8 h-8 tlp-accent" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-              </svg>
-            </div>
+            {/* The tick that draws itself, as in the request card; it starts when this block is shown */}
+            <svg viewBox="0 0 52 52" className="plan-check mx-auto mb-6 size-20" fill="none" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <circle cx="26" cy="26" r="24" className="stroke-crayn" />
+              <path d="M16 27l7 7 14-15" className="stroke-cloud" />
+            </svg>
             <h2 className="text-2xl font-extrabold text-white mb-3">
               Talebiniz alındı!
             </h2>
@@ -246,17 +246,23 @@ export default function TalepContent() {
                 <div className="talep-field" data-field="firma">
                   <label className="tlp-label">
                     Firma Adı
+                    <span className="tlp-accent ml-0.5">
+                      *
+                    </span>
                   </label>
                   {' '}
-                  <input type="text" name="fields[firma]" defaultValue="" placeholder="Şirketinizin adı" className="tlp-input" />
+                  <input type="text" name="fields[firma]" defaultValue="" placeholder="Şirketinizin adı" data-required="1" className="tlp-input" />
                   <p className="field-error hidden text-xs text-red-400 mt-2" />
                 </div>
                 <div className="talep-field" data-field="sektor">
                   <label className="tlp-label">
                     Sektör
+                    <span className="tlp-accent ml-0.5">
+                      *
+                    </span>
                   </label>
                   {' '}
-                  <select name="fields[sektor]" className="tlp-input">
+                  <select name="fields[sektor]" data-required="1" className="tlp-input">
                     <option value="">
                       Sektör seçin
                     </option>
@@ -287,9 +293,12 @@ export default function TalepContent() {
                 <div className="talep-field" data-field="olcek">
                   <label className="tlp-label">
                     Çalışan Sayısı
+                    <span className="tlp-accent ml-0.5">
+                      *
+                    </span>
                   </label>
                   {' '}
-                  <select name="fields[olcek]" className="tlp-input">
+                  <select name="fields[olcek]" data-required="1" className="tlp-input">
                     <option value="">
                       Şirket ölçeği
                     </option>
@@ -375,11 +384,15 @@ export default function TalepContent() {
                 </svg>
                 Geri
               </button>
-              <button type="button" id="talepNext" className="tlp-btn-main">
-                Devam et <span className="tlp-arr" aria-hidden="true">→</span>
+              <button type="button" id="talepNext" className="magnet-pill magnet-pill--light tlp-btn-main">
+                <span className="magnet-pill__face">
+                  Devam et <span className="tlp-arr" aria-hidden="true">→</span>
+                </span>
               </button>
-              <button type="submit" id="talepSubmit" className="tlp-btn-main hidden">
-                Talebi Gönder <span className="tlp-arr" aria-hidden="true">→</span>
+              <button type="submit" id="talepSubmit" className="magnet-pill magnet-pill--light tlp-btn-main hidden">
+                <span className="magnet-pill__face">
+                  Talebi Gönder <span className="tlp-arr" aria-hidden="true">→</span>
+                </span>
               </button>
             </div>
             <p id="talepFormError" className="hidden text-sm text-red-400 mt-4 text-center" />

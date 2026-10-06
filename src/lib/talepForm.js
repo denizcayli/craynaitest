@@ -31,6 +31,8 @@ export function initTalepForm() {
   }
 
   function showStep(n) {
+    // Which way the form is moving, for the step's entrance (styles/talep.css).
+    form.dataset.dir = n < current ? 'prev' : 'next'
     current = Math.min(Math.max(n, 1), totalSteps)
     for (let i = 1; i <= totalSteps; i++) {
       const el = stepEl(i)

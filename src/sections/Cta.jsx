@@ -1,5 +1,6 @@
-import AuroraGradient from '../components/AuroraGradient.jsx'
 import Faq from '../components/Faq.jsx'
+import Halo from '../components/Halo.jsx'
+import Typewriter from '../components/Typewriter.jsx'
 
 const QUESTIONS = [
   {
@@ -28,21 +29,32 @@ const QUESTIONS = [
   },
 ]
 
-// Closing section over a slowly swaying blue-grey aurora on a dark ground: the questions,
-// then the call to action.
+// Closing section over slowly wandering halos of blue light on a dark ground: the heading with
+// a typed line under it, the questions, and where to write.
 export default function Cta() {
   return (
     <section id="cta" className="relative isolate overflow-hidden bg-graphite text-cloud py-20 md:py-24 px-6 md:px-12">
-      {/* Mesh gradient in muted blue-greys, swaying very slowly behind the questions */}
-      <AuroraGradient className="-z-10" colors={['#4f6d99', '#5b6b80', '#7f97b8']} speed={0.6} blur={0} />
+      {/* Discs of light in the brand's blues, drifting very slowly behind the questions */}
+      <Halo
+        className="-z-10"
+        colors={[['#7da3ff', 5], ['#a9c1ff', 4], ['#f8fafc', 3]]}
+        size={340}
+        blur={90}
+        seconds={16}
+      />
+      <div className="absolute inset-0 -z-10 bg-graphite/45" />
       <div className="max-w-3xl mx-auto flex flex-col items-center">
-        <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-center mb-10">
+        <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-center">
           Sıkça Sorulan Sorular
         </h2>
+        <p className="mt-4 mb-10 text-center text-xl md:text-2xl font-semibold tracking-tight">
+          <Typewriter texts={['Bilmeniz gereken her şey...']} />
+        </p>
         <Faq items={QUESTIONS} className="w-full" />
-        <a href="/talep" className="magnetic-btn justify-center mt-12">
-          İşletmeniz İçin Planlayalım
-        </a>
+        <p className="mt-10 text-center text-lg text-cloud/75">
+          Aradığınızı bulamadınız mı? Bize yazın:{' '}
+          <a href="mailto:hello@crayn.ai" className="font-semibold text-cloud underline decoration-cloud/40 underline-offset-4 transition-colors hover:decoration-crayn">hello@crayn.ai</a>
+        </p>
       </div>
     </section>
   )

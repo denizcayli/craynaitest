@@ -11,11 +11,15 @@ const EASE = 'ease-[cubic-bezier(0.22,1,0.36,1)]'
 // On wide screens the enclosing section also holds still at the top of the viewport for a short
 // scroll that opens the cards in turn; `className` sizes the row (the section decides its height).
 // Items have `number`, `label`, `title`, `text`, `image` and optionally `icon`, `tags` and a card
-// `color`; `contain` shows the image whole (artwork) instead of filling the card (photo).
+// `color`; `contain` shows the image whole (artwork) instead of filling the card (photo). An item
+// with an `href` goes there when its open card is pressed.
 // `scrollLength` is how much scrolling the whole walkthrough takes.
 export default function ExpandingCards({ items, className = '', scrollLength = '+=100%' }) {
   const rootRef = useRef(null)
   const [active, setActive] = useState(0)
+  // Whether the card being pressed was already open when the press began. A tap on a touch
+  // screen opens the card first, so only a press on an open card follows its link.
+  const pressedOpen = useRef(false)
 
   useEffect(() => {
     const root = rootRef.current
@@ -52,7 +56,13 @@ export default function ExpandingCards({ items, className = '', scrollLength = '
             aria-expanded={open}
             onMouseEnter={() => setActive(index)}
             onFocus={() => setActive(index)}
-            onClick={() => setActive(index)}
+            onPointerDown={() => { pressedOpen.current = open }}
+            onClick={(event) => {
+              // Keyboard activation has no press; the card is open by then, having taken focus.
+              const follow = item.href && (event.detail === 0 || pressedOpen.current)
+              if (follow) window.location.assign(item.href)
+              else setActive(index)
+            }}
             style={{ backgroundColor: item.color }}
             className={`group relative overflow-hidden rounded-[10px] bg-[#111] text-left text-white shrink-0 md:shrink md:basis-0 transition-[flex-grow,height] duration-700 ${EASE} focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white md:h-full ${open ? 'grow-[5] h-[460px]' : 'grow h-16'}`}
           >
@@ -88,6 +98,12 @@ export default function ExpandingCards({ items, className = '', scrollLength = '
                   {item.tags.map((tag) => (
                     <span key={tag} className="px-2.5 py-0.5 border border-white/30 rounded-full text-[11px] font-bold uppercase text-white/90">{tag}</span>
                   ))}
+                </span>
+              )}
+              {item.href && (
+                <span className="mt-4 flex items-center gap-2 text-sm font-bold">
+                  Detayları gör
+                  <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">→</span>
                 </span>
               )}
             </span>

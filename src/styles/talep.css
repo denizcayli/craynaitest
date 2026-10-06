@@ -56,18 +56,23 @@ textarea.tlp-input { resize:none; line-height:1.5; }
 
 /* Alt kisim: geri + devam */
 .tlp-footer { display:flex; gap:8px; margin-top:16px; padding-top:14px; border-top:1px solid rgba(255,255,255,.08); }
-.tlp-btn-back { display:flex; align-items:center; gap:5px; padding:11px 18px; border-radius:11px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.03); font-size:13.5px; font-weight:500; color:rgba(203,213,225,.7); white-space:nowrap; -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); transition:border-color .18s, color .18s, background .18s; }
+.tlp-btn-back { display:flex; align-items:center; gap:5px; padding:11px 18px; border-radius:9999px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.03); font-size:13.5px; font-weight:500; color:rgba(203,213,225,.7); white-space:nowrap; -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); transition:border-color .18s, color .18s, background .18s; }
 .tlp-btn-back:hover { border-color:rgba(255,255,255,.25); color:#f8fafc; background:rgba(255,255,255,.06); }
-.tlp-btn-main { position:relative; flex:1; display:flex; align-items:center; justify-content:center; gap:7px; overflow:hidden; padding:11px 24px; border-radius:11px; background:#6e90e0; font-size:14px; font-weight:700; letter-spacing:-.01em; color:#0b0f14; transition:background .18s, transform .12s; }
-.tlp-btn-main::before { content:""; position:absolute; inset:0; background:linear-gradient(135deg, rgba(255,255,255,.18), transparent); pointer-events:none; }
-.tlp-btn-main:hover { background:#7da3ff; }
-.tlp-btn-main:active { transform:scale(.985); }
-.tlp-btn-main:focus-visible, .tlp-btn-back:focus-visible { outline:2px solid #f8fafc; outline-offset:2px; }
+/* The main action is a magnet pill (theme.css), stretched across the rest of the row */
+.tlp-btn-main { flex:1; }
+.tlp-btn-main .magnet-pill__face { flex:1; gap:7px; font-size:14px; font-weight:700; }
+.tlp-btn-back:focus-visible { outline:2px solid #f8fafc; outline-offset:2px; }
 .tlp-arr { display:inline-block; transition:transform .18s; }
 .tlp-btn-main:hover .tlp-arr { transform:translateX(3px); }
 /* Sihirbaz dugmeleri .hidden ile gizler; yukaridaki display kurallari onu ezmesin */
-.tlp-btn-back.hidden, .tlp-btn-main.hidden { display:none; }
+.tlp-btn-back.hidden { display:none; }
 
-.tlp-success-icon { display:inline-flex; align-items:center; justify-content:center; width:56px; height:56px; border-radius:9999px; background:rgba(125,163,255,.1); border:1px solid rgba(125,163,255,.3); }
 
-@media (prefers-reduced-motion: reduce) { .tlp-seg.is-now::after { animation:none; } }
+/* A step eases in from the side it was reached from: the right going on, the left going back
+   (lib/talepForm.js marks the direction on the form) */
+.talep-step { animation:tlp-step-in .5s cubic-bezier(.22,1,.36,1) both; }
+#talepForm[data-dir="prev"] .talep-step { animation-name:tlp-step-back; }
+@keyframes tlp-step-in { from { opacity:0; transform:translateX(28px); } }
+@keyframes tlp-step-back { from { opacity:0; transform:translateX(-28px); } }
+
+@media (prefers-reduced-motion: reduce) { .tlp-seg.is-now::after, .talep-step { animation:none; } }

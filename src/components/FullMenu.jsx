@@ -1,5 +1,6 @@
 import AuroraFlow from './AuroraFlow.jsx'
 import SocialLinks from './SocialLinks.jsx'
+import { SOCIALS } from '../data/socials.js'
 
 const LINKS = [
   { label: 'Ana Sayfa', href: '/#' },
@@ -9,13 +10,6 @@ const LINKS = [
   { label: 'Hizmetler', href: '/#services' },
   { label: 'Neler Yapıyoruz', href: '/#solutions' },
   { label: 'İletişim', href: '/talep' },
-]
-
-// Profile addresses are not set yet.
-const SOCIALS = [
-  { icon: 'instagram', label: 'Instagram', href: '#' },
-  { icon: 'x', label: 'Twitter', href: '#' },
-  { icon: 'linkedin', label: 'LinkedIn', href: '#' },
 ]
 
 // Full-screen menu: a dark sheet with slow ribbons of light flowing behind it, opening in a
