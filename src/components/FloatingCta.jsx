@@ -1,0 +1,71 @@
+import { useEffect, useRef, useState } from 'react'
+import { useLocation } from 'react-router-dom'
+import LiquidLogo, { LOGO_URL } from './LiquidLogo.jsx'
+import { introFinished } from './Preloader.jsx'
+import { isDarkBehind } from '../lib/backdrop.js'
+
+// Fixed round call-to-action in frosted glass: pops in on load, turns with the page scroll and
+// switches between light and dark lettering to stay readable over whatever is behind it.
+export default function FloatingCta() {
+  const { pathname } = useLocation()
+  const ref = useRef(null)
+  const [onDark, setOnDark] = useState(true)
+  // Preparing the metal logo is heavy, so it waits for the intro; the plain icon stands in.
+  const [metal, setMetal] = useState(false)
+  useEffect(() => { introFinished.then(() => setMetal(true)) }, [])
+  const hidden = pathname === '/talep'
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const turns = !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    let frame = 0
+    const update = () => {
+      frame = 0
+      if (turns) el.style.setProperty('--fab-rot', `${window.scrollY * 0.08}deg`)
+      const rect = el.getBoundingClientRect()
+      setOnDark(isDarkBehind(rect.left + rect.width / 2, rect.top + rect.height / 2, el))
+    }
+    const schedule = () => { if (!frame) frame = requestAnimationFrame(update) }
+
+    update()
+    window.addEventListener('scroll', schedule, { passive: true })
+    window.addEventListener('resize', schedule)
+    return () => {
+      window.removeEventListener('scroll', schedule)
+      window.removeEventListener('resize', schedule)
+      if (frame) cancelAnimationFrame(frame)
+    }
+  }, [hidden])
+
+  if (hidden) return null
+
+  return (
+    <a
+      ref={ref}
+      href="/talep"
+      aria-label="Proje başlat, bize ulaşın"
+      style={{ rotate: 'var(--fab-rot, 0deg)' }}
+      className={`fixed bottom-6 right-4 lg:bottom-8 lg:right-8 z-[45] size-[76px] lg:size-[104px] rounded-full border shadow-lg backdrop-blur-md backdrop-saturate-150 transition-[filter,background-color,border-color,color] duration-300 hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crayn ${onDark ? 'border-white/30 bg-white/10 text-white' : 'border-graphite/15 bg-cloud/60 text-graphite'}`}
+    >
+      <span className="fab-pop relative block size-full">
+        <svg viewBox="0 0 160 160" className="block size-full" aria-hidden="true">
+          <defs>
+            <path id="floating-cta-text-path" d="M 80,23 a 57,57 0 1,1 0,114 a 57,57 0 1,1 0,-114" />
+          </defs>
+          <text fill="currentColor" style={{ fontSize: '15px', fontWeight: 800 }}>
+            <textPath href="#floating-cta-text-path" textLength="352" lengthAdjust="spacing">
+              PROJE BAŞLAT • BİZE ULAŞIN •
+            </textPath>
+          </text>
+          {/* Light plate so the logo's dark bands stay visible on dark pages */}
+          <circle cx="80" cy="80" r="47" fill="#F8FAFC" fillOpacity="0.92" />
+        </svg>
+        <span className="absolute left-1/2 top-1/2 size-[54%] -translate-x-1/2 -translate-y-1/2">
+          {metal ? <LiquidLogo /> : <img src={LOGO_URL} alt="" className="size-full" />}
+        </span>
+      </span>
+    </a>
+  )
+}

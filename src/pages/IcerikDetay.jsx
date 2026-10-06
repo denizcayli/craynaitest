@@ -1,0 +1,16 @@
+import { useParams } from 'react-router-dom'
+import IcerikDetayContent from './IcerikDetayContent.jsx'
+import NotFound from './NotFound.jsx'
+import { findPost } from '../data/posts.js'
+
+export default function IcerikDetay() {
+  const { slug } = useParams()
+  const post = findPost(slug)
+  if (!post) return <NotFound />
+
+  return (
+    <main className="min-h-screen pt-24 bg-[#070707]">
+      <IcerikDetayContent post={post} />
+    </main>
+  )
+}

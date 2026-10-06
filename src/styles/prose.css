@@ -1,0 +1,8 @@
+.prose-crayn { color:#d1d5db; }
+.prose-crayn h1,.prose-crayn h2,.prose-crayn h3,.prose-crayn h4 { color:#fff; }
+.prose-crayn a { color:#7da3ff; text-decoration:underline; }
+.prose-crayn strong { color:#fff; }
+.prose-crayn img { border-radius:0.75rem; max-width:100%; height:auto; }
+.prose-crayn blockquote { border-left:3px solid #7da3ff; padding-left:1rem; color:#9ca3af; font-style:italic; }
+.prose-crayn ul,.prose-crayn ol { padding-left:1.25rem; }
+.prose-crayn ul { list-style:disc; } .prose-crayn ol { list-style:decimal; }

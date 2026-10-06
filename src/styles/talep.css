@@ -1,0 +1,73 @@
+/* Crayn talep wizard — one frosted-glass card: segmented progress, a step tag and counter,
+   glass fields and option cards, and a back / continue footer */
+.tlp-wrap { position:relative; }
+.tlp-glow { position:absolute; top:0; left:50%; transform:translateX(-50%); width:600px; height:600px; max-width:100%; background:rgba(125,163,255,.08); border-radius:9999px; filter:blur(160px); pointer-events:none; }
+.tlp-accent { color:#7da3ff; }
+.tlp-eyebrow { letter-spacing:.2em; }
+
+/* Kart */
+.tlp-glass { position:relative; padding:26px 32px; border-radius:20px; border:1px solid rgba(255,255,255,.1); background:rgba(11,15,20,.66); -webkit-backdrop-filter:blur(24px); backdrop-filter:blur(24px); box-shadow:0 24px 60px -20px rgba(0,0,0,.6); }
+/* Ust kenardaki ince isik cizgisi */
+.tlp-shimmer { position:absolute; top:0; left:44px; right:44px; height:1px; background:linear-gradient(90deg, transparent, rgba(125,163,255,.7), transparent); }
+@media (max-width:480px) { .tlp-glass { padding:28px 20px 24px; } }
+
+/* Ilerleme: dort parca, gecilenler dolu, bulunulan soldan dolar */
+.tlp-prog { display:flex; gap:5px; margin-bottom:18px; }
+.tlp-seg { position:relative; flex:1; height:2px; overflow:hidden; border-radius:2px; background:rgba(255,255,255,.1); }
+.tlp-seg.is-done { background:#7da3ff; }
+.tlp-seg.is-now::after { content:""; position:absolute; inset:0; border-radius:2px; background:linear-gradient(90deg, #6e90e0, #7da3ff); animation:tlp-fill .5s cubic-bezier(.4,0,.2,1) forwards; }
+@keyframes tlp-fill { from { width:0; } to { width:100%; } }
+.tlp-meta { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+.tlp-tag { display:inline-flex; align-items:center; padding:3px 10px; border-radius:100px; border:1px solid rgba(125,163,255,.25); background:rgba(125,163,255,.1); font-size:11px; font-weight:600; letter-spacing:.09em; text-transform:uppercase; color:#7da3ff; }
+.tlp-count { font-size:11px; font-weight:600; color:rgba(203,213,225,.45); }
+
+/* Adim basligi */
+.tlp-title { font-size:23px; font-weight:800; letter-spacing:-.03em; line-height:1.12; color:#f8fafc; margin-bottom:4px; }
+.tlp-sub { font-size:14px; font-weight:300; line-height:1.65; color:rgba(203,213,225,.6); }
+.tlp-label { display:block; margin-bottom:6px; font-size:11px; font-weight:600; letter-spacing:.05em; text-transform:uppercase; color:rgba(203,213,225,.7); }
+
+/* Girdi alanlari */
+.tlp-input { width:100%; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1); border-radius:11px; padding:9px 14px; color:#f8fafc; font-size:14px; outline:none; -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); transition:border-color .18s, background .18s, box-shadow .18s; }
+.tlp-input::placeholder { color:rgba(203,213,225,.35); }
+.tlp-input:focus { border-color:rgba(125,163,255,.45); background:rgba(125,163,255,.05); box-shadow:0 0 0 3px rgba(125,163,255,.12); }
+select.tlp-input { appearance:none; -webkit-appearance:none; cursor:pointer; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23cbd5e1' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right .9rem center; background-size:1rem; padding-right:2.5rem; }
+select.tlp-input option { background:#0b0f14; color:#f8fafc; }
+textarea.tlp-input { resize:none; line-height:1.5; }
+
+/* Secenek kartlari (radio/checkbox/consent) */
+.tlp-opt { display:flex; align-items:center; gap:.75rem; padding:11px 14px; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.1); border-radius:13px; cursor:pointer; user-select:none; -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); transition:border-color .18s, background .18s; }
+.tlp-opt:hover { border-color:rgba(255,255,255,.22); background:rgba(255,255,255,.05); }
+.tlp-opt.tlp-opt--start { align-items:flex-start; }
+.tlp-opt input { position:absolute; opacity:0; width:0; height:0; }
+.tlp-opt:has(input:checked) { border-color:rgba(125,163,255,.45); background:rgba(125,163,255,.08); }
+.tlp-opt:has(input:focus-visible) { box-shadow:0 0 0 3px rgba(125,163,255,.2); }
+
+.tlp-mark { width:16px; height:16px; flex-shrink:0; display:flex; align-items:center; justify-content:center; border:1.5px solid rgba(255,255,255,.25); transition:all .18s; }
+.tlp-mark--radio { border-radius:9999px; }
+.tlp-mark--check { border-radius:5px; margin-top:.15rem; }
+.tlp-mark .tlp-dot { width:7px; height:7px; border-radius:9999px; background:#7da3ff; transform:scale(0); transition:transform .14s; }
+.tlp-mark .tlp-ico { width:10px; height:10px; color:#0b0f14; transform:scale(0); transition:transform .14s; }
+.tlp-opt input:checked ~ .tlp-mark--radio { border-color:#7da3ff; }
+.tlp-opt input:checked ~ .tlp-mark--radio .tlp-dot { transform:scale(1); }
+.tlp-opt input:checked ~ .tlp-mark--check { border-color:#7da3ff; background:#7da3ff; }
+.tlp-opt input:checked ~ .tlp-mark--check .tlp-ico { transform:scale(1); }
+.tlp-opt-label { font-size:13px; font-weight:600; color:rgba(203,213,225,.85); transition:color .18s; }
+.tlp-opt:has(input:checked) .tlp-opt-label { color:#f8fafc; }
+
+/* Alt kisim: geri + devam */
+.tlp-footer { display:flex; gap:8px; margin-top:16px; padding-top:14px; border-top:1px solid rgba(255,255,255,.08); }
+.tlp-btn-back { display:flex; align-items:center; gap:5px; padding:11px 18px; border-radius:11px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.03); font-size:13.5px; font-weight:500; color:rgba(203,213,225,.7); white-space:nowrap; -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); transition:border-color .18s, color .18s, background .18s; }
+.tlp-btn-back:hover { border-color:rgba(255,255,255,.25); color:#f8fafc; background:rgba(255,255,255,.06); }
+.tlp-btn-main { position:relative; flex:1; display:flex; align-items:center; justify-content:center; gap:7px; overflow:hidden; padding:11px 24px; border-radius:11px; background:#6e90e0; font-size:14px; font-weight:700; letter-spacing:-.01em; color:#0b0f14; transition:background .18s, transform .12s; }
+.tlp-btn-main::before { content:""; position:absolute; inset:0; background:linear-gradient(135deg, rgba(255,255,255,.18), transparent); pointer-events:none; }
+.tlp-btn-main:hover { background:#7da3ff; }
+.tlp-btn-main:active { transform:scale(.985); }
+.tlp-btn-main:focus-visible, .tlp-btn-back:focus-visible { outline:2px solid #f8fafc; outline-offset:2px; }
+.tlp-arr { display:inline-block; transition:transform .18s; }
+.tlp-btn-main:hover .tlp-arr { transform:translateX(3px); }
+/* Sihirbaz dugmeleri .hidden ile gizler; yukaridaki display kurallari onu ezmesin */
+.tlp-btn-back.hidden, .tlp-btn-main.hidden { display:none; }
+
+.tlp-success-icon { display:inline-flex; align-items:center; justify-content:center; width:56px; height:56px; border-radius:9999px; background:rgba(125,163,255,.1); border:1px solid rgba(125,163,255,.3); }
+
+@media (prefers-reduced-motion: reduce) { .tlp-seg.is-now::after { animation:none; } }

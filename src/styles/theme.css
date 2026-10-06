@@ -1,0 +1,557 @@
+:root {
+    --bg-color: #030303;
+    --text-main: #ffffff;
+    --text-muted: #888888;
+    --border-color: #1a1a1a;
+}
+
+body {
+    font-family: 'Manrope', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Arka Plan Izgarası */
+.bg-grid {
+    background-image:
+        linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(circle at center, black, transparent 90%);
+    -webkit-mask-image: radial-gradient(circle at center, black, transparent 90%);
+}
+
+/* Manyetik Buton */
+.magnetic-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    color: #000000;
+    padding: 1.15rem 2.25rem;
+    border-radius: 9999px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s;
+    border: none;
+    outline: none;
+}
+.magnetic-btn:hover { background: #e0e0e0; }
+/* Keeps Tailwind's .hidden working on buttons (the wizard toggles it) */
+.magnetic-btn.hidden { display: none; }
+.magnetic-btn-dark { background: transparent; color: #ffffff; border: 1px solid #333; }
+.magnetic-btn-dark:hover { background: #111; }
+.magnetic-btn-ink { background: #0b0f14; color: #f8fafc; }
+.magnetic-btn-ink:hover { background: #000; }
+
+/* Başlangıç Animasyon Durumları */
+.hero-title-word { display: inline-block; opacity: 0; transform: translateY(40px); }
+.hero-fade { opacity: 0; transform: translateY(20px); }
+
+/* Rozet Animasyonu (Infinitely Rotating) */
+.mxd-rotate {
+    animation: rotate-slow 15s linear infinite;
+}
+@keyframes rotate-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Hero Devasa Arka Plan Marquee */
+.hero-giant-marquee {
+    animation: marquee-fast var(--marquee-speed, 100s) linear infinite;
+}
+@keyframes marquee-fast {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-50%); }
+}
+
+/* Interactive Parallax / Floating Center Piece Wrapper */
+.centerpiece-wrapper {
+    perspective: 1000px;
+}
+.centerpiece-inner {
+    transform-style: preserve-3d;
+    transition: transform 0.2s ease-out;
+    animation: float 6s ease-in-out infinite;
+}
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-15px) rotate(2deg); }
+}
+
+/* Marquee Item */
+.marquee__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 2rem;
+    padding: 0.05em 0.4em;
+    flex-shrink: 0;
+}
+.marquee__item .marquee__text {
+    color: #ffffff;
+    margin: 0;
+}
+
+/* Metin Seçim Rengi */
+/* Translucent, glass-like tint; the text keeps its own colour */
+::selection { background: rgba(150, 190, 255, 0.38); }
+::-moz-selection { background: rgba(150, 190, 255, 0.38); }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #000; }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #555; }
+
+/* STACKING SECTION STİLLERİ - KARTLAR ÜST ÜSTE BİNER */
+.stack-container {
+    position: relative;
+    padding-bottom: 100px;
+}
+.stack-card {
+    position: sticky;
+    border-radius: 2.5rem;
+    min-height: 480px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 -20px 40px rgba(0,0,0,0.8);
+    transition: transform 0.3s ease;
+}
+
+/* Kademeli Yapışma Yükseklikleri */
+.stack-card:nth-child(1) { top: 100px; z-index: 1; }
+.stack-card:nth-child(2) { top: 120px; z-index: 2; }
+.stack-card:nth-child(3) { top: 140px; z-index: 3; }
+.stack-card:nth-child(4) { top: 160px; z-index: 4; }
+.stack-card:nth-child(5) { top: 180px; z-index: 5; }
+.stack-card:nth-child(6) { top: 200px; z-index: 6; }
+
+/* SWIPE SLIDER ÖZEL KART ESTETİĞİ */
+.service-el {
+    --service-expo-height: 90px;
+    background: rgba(108, 53, 178, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: background-color 0.45s ease, border-color 0.45s ease;
+}
+.service-el:hover {
+    background: rgba(108, 53, 178, 0.08);
+    border-color: rgba(108, 53, 178, 0.3);
+}
+/* Hover durumunda içeriğin yukarı süzülmesi */
+.service-el .icon-wrapper,
+.service-el .title,
+.service-el .expo {
+    transform: translateY(var(--service-expo-height));
+    transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.45s ease;
+}
+.service-el:hover .icon-wrapper,
+.service-el:hover .title,
+.service-el:hover .expo {
+    transform: translateY(0);
+}
+.service-el:hover .expo {
+    opacity: 1 !important;
+}
+/* Hover durumunda sağ üstte beliren küre animasyonu */
+.service-el .image-sphere {
+    transform: translate(40%, -40%) scale(0.7);
+    opacity: 0.1;
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.6s ease;
+}
+.service-el:hover .image-sphere {
+    transform: translate(15%, -15%) scale(1);
+    opacity: 0.35;
+}
+
+/* Floating CTA: pop-in on load */
+.fab-pop { animation: fab-pop 500ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+@keyframes fab-pop {
+    from { opacity: 0; scale: 0.6; }
+    to { opacity: 1; scale: 1; }
+}
+
+/* Link underline that draws in from the left on hover */
+.link-underline { position: relative; display: inline-block; }
+.link-underline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -0.25rem;
+    width: 100%;
+    height: 1px;
+    background: #e11d48;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+}
+.link-underline:hover::after { transform: scaleX(1); }
+
+@media (prefers-reduced-motion: reduce) {
+    .fab-pop { animation: none; }
+}
+
+/* HERO — sized in --u, one thousandth of the reference frame the scene was designed on */
+.hero { --u: min(0.1vw, 0.1522vh); }
+.hero-kicker {
+    font-size: max(calc(var(--u) * 11.5), 0.7rem);
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.75);
+}
+.hero-heading {
+    font-size: max(calc(var(--u) * 74), 2.5rem);
+    line-height: 1.02;
+    letter-spacing: -0.045em;
+    color: #fff;
+}
+.hero-reveal {
+    color: transparent;
+    background: linear-gradient(100deg, #7da3ff 8%, #cbd5e1 30%, #a9c1ff 50%, #7da3ff 70%, #cbd5e1 92%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-mask-image:
+        radial-gradient(circle var(--r0, 0px) at var(--x0, 0px) var(--y0, 0px), #000 82%, transparent),
+        radial-gradient(circle var(--r1, 0px) at var(--x1, 0px) var(--y1, 0px), #000 82%, transparent),
+        radial-gradient(circle var(--r2, 0px) at var(--x2, 0px) var(--y2, 0px), #000 82%, transparent),
+        radial-gradient(circle var(--r3, 0px) at var(--x3, 0px) var(--y3, 0px), #000 82%, transparent),
+        radial-gradient(circle var(--r4, 0px) at var(--x4, 0px) var(--y4, 0px), #000 82%, transparent);
+    mask-image:
+        radial-gradient(circle var(--r0, 0px) at var(--x0, 0px) var(--y0, 0px), #000 82%, transparent),
+        radial-gradient(circle var(--r1, 0px) at var(--x1, 0px) var(--y1, 0px), #000 82%, transparent),
+        radial-gradient(circle var(--r2, 0px) at var(--x2, 0px) var(--y2, 0px), #000 82%, transparent),
+        radial-gradient(circle var(--r3, 0px) at var(--x3, 0px) var(--y3, 0px), #000 82%, transparent),
+        radial-gradient(circle var(--r4, 0px) at var(--x4, 0px) var(--y4, 0px), #000 82%, transparent);
+}
+.hero-cta { margin-top: max(calc(var(--u) * 72), 3rem); }
+.hero-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: max(calc(var(--u) * 8.5), 0.6rem) max(calc(var(--u) * 24), 1.4rem);
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    background: transparent;
+    transition: background-color 0.25s ease, border-color 0.25s ease;
+}
+.hero-pill:hover { background: rgba(255, 255, 255, 0.12); border-color: #fff; }
+/* Filled variant for the primary action */
+.hero-pill--solid { background: #fff; border-color: #fff; }
+.hero-pill--solid:hover { background: rgba(255, 255, 255, 0.85); }
+.hero-pill.hero-pill--solid span { color: #0b0f14; }
+.hero-pill span {
+    font-size: max(calc(var(--u) * 9.5), 0.72rem);
+    font-weight: 800;
+    font-style: italic;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #fff;
+}
+
+/* Hand-written headings: letters slide in from the left while un-tilting, with a springy settle */
+.hand-write-letter {
+    display: inline-block;
+    white-space: pre;
+    opacity: 0;
+    transform: translateX(-8px) rotate(-5deg);
+    transform-origin: left center;
+    transition: opacity 0.25s ease, transform 0.45s cubic-bezier(0.3, 1.45, 0.5, 1);
+}
+.hand-write-letter.is-written { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+    .hand-write-letter { opacity: 1; transform: none; transition: none; }
+}
+
+/* Services bento: cards sit muted until hovered or opened, then come into the spotlight */
+.bento-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+    padding: 28px;
+    border-radius: 1.75rem;
+    color: #fff;
+    cursor: pointer;
+    outline-offset: 3px;
+}
+.bento-card:focus-visible { outline: 2px solid #191919; }
+.bento-card__image {
+    position: absolute;
+    top: 6%;
+    right: 2%;
+    height: 62%;
+    object-fit: contain;
+    opacity: 0.5;
+    filter: saturate(0.1);
+    transition: opacity 0.8s ease, filter 0.8s ease, transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+/* Photo variant: fills the card, greyed and dimmed until the card is in the spotlight */
+.bento-card__cover {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.35;
+    filter: saturate(0);
+    transition: opacity 0.8s ease, filter 0.8s ease, transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.bento-card:hover .bento-card__cover,
+.bento-card:focus-visible .bento-card__cover,
+.bento-card.is-open .bento-card__cover { opacity: 0.85; filter: saturate(1); transform: scale(1.04); }
+.bento-card__shade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.6) 100%);
+    opacity: 0;
+    transition: opacity 0.8s ease;
+}
+/* The description takes no room until it is shown, so the title rests at the bottom of the card */
+.bento-card__more {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transition: grid-template-rows 0.8s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.8s ease;
+}
+.bento-card__more > div { overflow: hidden; }
+.bento-card:hover .bento-card__image,
+.bento-card:focus-visible .bento-card__image,
+.bento-card.is-open .bento-card__image { opacity: 1; filter: saturate(1); transform: scale(1.06); }
+.bento-card:hover .bento-card__shade,
+.bento-card:focus-visible .bento-card__shade,
+.bento-card.is-open .bento-card__shade,
+.bento-card:hover .bento-card__more,
+.bento-card:focus-visible .bento-card__more,
+.bento-card.is-open .bento-card__more { grid-template-rows: 1fr; opacity: 1; }
+/* Touch screens have no hover, so the description is always readable there */
+@media (hover: none) {
+    .bento-card__more { grid-template-rows: 1fr; opacity: 1; }
+    .bento-card__shade { opacity: 1; }
+}
+
+
+/* Link label that rolls up on hover, with a copy arriving from below */
+.roll-link { display: inline-block; height: 1.625em; overflow: hidden; line-height: 1.625; }
+.roll-link span { display: block; transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
+.roll-link:hover span, .roll-link:focus-visible span { transform: translateY(-100%); }
+
+/* Testimonials slider fades out towards both edges */
+.trust-slider {
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 12.5%, #000 87.5%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, #000 12.5%, #000 87.5%, transparent 100%);
+}
+
+/* Previous / next buttons of the testimonials slider */
+.trust-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 9999px;
+    border: 1px solid rgba(11, 15, 20, 0.2);
+    color: #0b0f14;
+    transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+.trust-arrow:hover { background: #0b0f14; border-color: #0b0f14; color: #f8fafc; }
+.trust-arrow:focus-visible { outline: 2px solid #7da3ff; outline-offset: 2px; }
+
+/* Fixed-image window: the picture stays put while its frame scrolls. Touch browsers handle
+   fixed backgrounds poorly, so there the picture simply scrolls with its frame. */
+.parallax-fixed-image { background-attachment: fixed; }
+@media (hover: none) {
+    .parallax-fixed-image { background-attachment: scroll; }
+}
+
+/* Typewriter: letters are typed next to a blinking block caret; the newest ones carry a
+   coloured trail and a finished text turns fully coloured */
+.typewriter { display: grid; }
+.typewriter__ghost, .typewriter__live { grid-area: 1 / 1; white-space: pre-line; }
+.typewriter__ghost { visibility: hidden; }
+.typewriter__line { display: block; min-height: 1.05em; }
+.typewriter__text { color: #f7f8ff; transition: color 0.32s ease; }
+.typewriter__text.is-complete,
+.typewriter__trail {
+    color: transparent;
+    background-image: linear-gradient(90deg, #cbd5e1, #7da3ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+.typewriter__caret {
+    display: inline-block;
+    width: 0.42em;
+    height: 0.82em;
+    margin-left: 0.06em;
+    vertical-align: -0.06em;
+    background: #7da3ff;
+    animation: typewriter-blink 1s steps(1) infinite;
+}
+@keyframes typewriter-blink {
+    50% { opacity: 0; }
+}
+
+/* Social links: round buttons in a pill; the hovered one grows from its base and shows its name */
+.social-links {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.08);
+}
+.social-links__item {
+    position: relative;
+    display: flex;
+    width: 40px;
+    height: 40px;
+    color: #fff;
+}
+.social-links__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+    transform-origin: 50% 100%;
+    transition: transform 0.35s cubic-bezier(0.3, 1.5, 0.5, 1), background-color 0.25s ease;
+}
+.social-links__label {
+    position: absolute;
+    left: 50%;
+    bottom: 100%;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transform: translate(-50%, 16px) scale(0.5);
+    transform-origin: bottom center;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.social-links__item:hover, .social-links__item:focus-visible { z-index: 2; }
+.social-links__item:hover .social-links__icon,
+.social-links__item:focus-visible .social-links__icon { transform: scale(1.3); background: rgba(255, 255, 255, 0.2); }
+.social-links__item:hover .social-links__label,
+.social-links__item:focus-visible .social-links__label { opacity: 1; transform: translate(-50%, -16px) scale(1); }
+
+/* PAGE VEIL — dark cover over the whole screen that fades away as a page arrives and fades back
+   in when a link to another page is clicked, so pages dissolve into each other */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 9990;
+    background: #05070a;
+    opacity: 0;
+    pointer-events: none;
+    animation: page-arrive 0.6s ease both;
+    transition: opacity 0.38s ease;
+}
+.page-leaving body::after { opacity: 1; animation: none; pointer-events: auto; }
+@keyframes page-arrive {
+    from { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+    body::after { animation: none; transition: none; }
+}
+
+/* PRELOADER — cloud-white screen with the logo centred between two labels. The screen has an
+   opening where the logo sits; the whole screen zooms in on it until the page behind, seen
+   through the logo's hollow centre, fills the view. Only its scale animates. */
+.preloader {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(10px, 1.4vw, 20px);
+    padding: 0 20px;
+    will-change: transform;
+}
+.preloader-screen { position: absolute; inset: 0; background: #f8fafc; }
+.preloader-slot {
+    position: relative;
+    flex-shrink: 0;
+    width: clamp(56px, 6.5vw, 104px);
+    aspect-ratio: 1;
+}
+/* Keeps the opening closed behind the logo until the zoom starts */
+.preloader-plug { position: absolute; inset: -1px; background: #f8fafc; }
+.preloader-logo { position: absolute; inset: 0; animation: preloader-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both; }
+.preloader-metal { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+.preloader-label {
+    position: relative;
+    flex-shrink: 0;
+    width: clamp(100px, 17vw, 250px);
+    font-size: clamp(22px, 3.6vw, 55px);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    white-space: nowrap;
+    color: #0b0f14;
+    animation: preloader-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.preloader-label--left { text-align: right; }
+.preloader-label--right { text-align: left; animation-delay: 0.2s; }
+@keyframes preloader-rise {
+    from { opacity: 0; transform: translateY(24px); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .preloader-label, .preloader-logo { animation: none; }
+}
+
+/* FOOTER — light panel, full width, no frame; blurred copies of the Crayn mark breathe behind
+   its content */
+.footer-panel {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+    overflow: hidden;
+    padding: 44px 28px 24px;
+    background: #e2e7ee;
+    color: #0b0f14;
+}
+@media (min-width: 768px) { .footer-panel { gap: 40px; padding: 48px 64px 28px; } }
+.footer-mark {
+    position: absolute;
+    z-index: 0;
+    max-width: none;
+    filter: blur(14px);
+    pointer-events: none;
+    user-select: none;
+    will-change: transform, opacity;
+}
+.footer-mark--left { left: -40px; bottom: -170px; width: 440px; opacity: 0.24; animation: footer-breathe-right 6s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate; }
+.footer-mark--right { right: 20px; top: -140px; width: 360px; opacity: 0.22; animation: footer-breathe-left 7s cubic-bezier(0.45, 0, 0.55, 1) 0.5s infinite alternate; }
+.footer-mark--centre { left: 40%; bottom: -170px; width: 380px; opacity: 0.14; animation: footer-breathe-left 9s cubic-bezier(0.45, 0, 0.55, 1) 1s infinite alternate; }
+@keyframes footer-breathe-right {
+    to { transform: translateX(260px) rotate(35deg) scale(1.15); opacity: 0.42; }
+}
+@keyframes footer-breathe-left {
+    to { transform: translateX(-200px) rotate(-30deg) scale(1.25); opacity: 0.32; }
+}
+.footer-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: 9999px;
+    background: #0b0f14;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #f8fafc;
+    transition: background-color 0.25s ease, box-shadow 0.25s ease, color 0.25s ease;
+}
+.footer-cta:hover { background: #7da3ff; color: #0b0f14; }
+@media (prefers-reduced-motion: reduce) { .footer-mark { animation: none; } }

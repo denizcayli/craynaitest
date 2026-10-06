@@ -1,0 +1,32 @@
+import HandWrite from '../components/HandWrite.jsx'
+import PostRow from '../components/PostRow.jsx'
+import { POSTS } from '../data/posts.js'
+
+export default function Blog() {
+  return (
+    <section id="blog" className="py-32 bg-[#e6ebf2] text-graphite overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6 md:px-12">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
+          <div className="md:max-w-2xl">
+            <h2 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 leading-tight">
+              <HandWrite text="İçerikler" />
+            </h2>
+            <p className="text-slate-brand text-lg leading-relaxed max-w-xl">
+              Yapay zeka, yazılım ve dijital dönüşüm üzerine en güncel yazılarımız.
+            </p>
+          </div>
+          <a href="/icerikler" className="glass-btn group shrink-0">
+            <span>
+              Tüm İçerikler
+            </span>
+            {' '}
+            <svg className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+            </svg>
+          </a>
+        </div>
+        <PostRow posts={POSTS.slice(0, 3)} />
+      </div>
+    </section>
+  )
+}
