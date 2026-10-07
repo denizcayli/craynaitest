@@ -112,7 +112,27 @@ export function initTalepForm() {
     steps.forEach((el) => { el.style.minHeight = `${tallest}px` })
   }
   levelSteps()
-  window.addEventListener('resize', levelSteps, { signal })
+  // Only a change of width can change the steps' heights. A phone also reports a resize when its
+  // keyboard or address bar comes and goes, and measuring then would replay the step's entrance
+  // and make the form jump under the finger.
+  let levelledAt = window.innerWidth
+  window.addEventListener('resize', () => {
+    if (window.innerWidth === levelledAt) return
+    levelledAt = window.innerWidth
+    levelSteps()
+  }, { signal })
+
+  // On a phone the keyboard covers half the screen, so the field being filled in is brought to
+  // the middle of what is left, once the keyboard has come up.
+  if (window.matchMedia('(pointer: coarse)').matches) {
+    let centring
+    form.addEventListener('focusin', (e) => {
+      if (!e.target.matches('input:not([type="radio"]):not([type="checkbox"]), textarea, select')) return
+      clearTimeout(centring)
+      centring = setTimeout(() => e.target.scrollIntoView({ block: 'center', behavior: 'smooth' }), 300)
+    }, { signal })
+    signal.addEventListener('abort', () => clearTimeout(centring))
+  }
 
   showStep(1)
 

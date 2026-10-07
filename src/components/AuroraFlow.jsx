@@ -90,8 +90,10 @@ function compile(gl, type, source) {
 // pointer, and only draws while it is actually on screen (so a hidden menu costs nothing).
 // Colours are six-digit hex. `intensity` scales how bright the ribbons are, `speed` how fast
 // they flow and `pointerSpeed` how quickly the twist catches up with the pointer (1 is the
-// original for each; 0 turns pointer following off). Without WebGL2 the plain background colour is shown.
-export default function AuroraFlow({ background = '#f6f4ef', color1 = '#2fd3f2', color2 = '#7b61ff', intensity = 1, speed = 1, pointerSpeed = 1, className = '' }) {
+// original for each; 0 turns pointer following off). `stillOnPhones` draws a single frame on
+// phones instead of flowing, for pages where it would run behind a form the whole visit.
+// Without WebGL2 the plain background colour is shown.
+export default function AuroraFlow({ background = '#f6f4ef', color1 = '#2fd3f2', color2 = '#7b61ff', intensity = 1, speed = 1, pointerSpeed = 1, stillOnPhones = false, className = '' }) {
   const rootRef = useRef(null)
   const canvasRef = useRef(null)
 
@@ -123,6 +125,9 @@ export default function AuroraFlow({ background = '#f6f4ef', color1 = '#2fd3f2',
     let width = 0
     let height = 0
     const resizeObserver = new ResizeObserver(() => {
+      // A phone's address bar changes the height as the page scrolls; the still picture is
+      // stretched that little bit rather than drawn again, which would make it jump.
+      if (phone && stillOnPhones && width && root.clientWidth === width) return
       width = root.clientWidth
       height = root.clientHeight
       if (width && height) wake()
@@ -139,6 +144,7 @@ export default function AuroraFlow({ background = '#f6f4ef', color1 = '#2fd3f2',
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const phone = window.matchMedia('(pointer: coarse)').matches
+    const still = reducedMotion || (phone && stillOnPhones)
     let frame = 0
     let last = -1
     let clock = 0
@@ -147,8 +153,8 @@ export default function AuroraFlow({ background = '#f6f4ef', color1 = '#2fd3f2',
     const render = (now) => {
       // Hidden (display: none) or collapsed: stop until the size comes back.
       if (!width || !height) { frame = 0; last = -1; return }
-      frame = reducedMotion ? 0 : requestAnimationFrame(render)
-      if (phone && last >= 0 && now - last < PHONE_FRAME) return
+      frame = still ? 0 : requestAnimationFrame(render)
+      if (!still && phone && last >= 0 && now - last < PHONE_FRAME) return
       const dt = last < 0 ? 0 : Math.min((now - last) / 1000, 0.05)
       last = now
       clock = (clock + dt * speed) % 3600
@@ -200,7 +206,7 @@ export default function AuroraFlow({ background = '#f6f4ef', color1 = '#2fd3f2',
       gl.deleteShader(vertex)
       gl.deleteShader(fragment)
     }
-  }, [background, color1, color2, intensity, speed, pointerSpeed])
+  }, [background, color1, color2, intensity, speed, pointerSpeed, stillOnPhones])
 
   return (
     <div ref={rootRef} aria-hidden="true" className={`absolute inset-0 overflow-hidden ${className}`} style={{ background }}>
