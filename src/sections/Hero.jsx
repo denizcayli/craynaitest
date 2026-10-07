@@ -3,6 +3,7 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import HeroPearls from '../components/HeroPearls.jsx'
 import { preloaderRemaining } from '../components/Preloader.jsx'
+import { withBase } from '../lib/paths.js'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -78,10 +79,10 @@ export default function Hero() {
         Crayn AI, modern işletmeler için özel AI agent'lar, otomasyon sistemleri ve ölçeklenebilir üretken yapay zeka yazılımları geliştiren yerli bir yazılım şirketidir.
       </p>
       <div className="hero-fade hero-cta relative z-10 flex flex-wrap items-stretch justify-center gap-3">
-        <a href="/talep" className="magnet-pill magnet-pill--logo">
+        <a href={withBase('/talep')} className="magnet-pill magnet-pill--logo">
           <span className="magnet-pill__face">Sistemi Planlayalım</span>
         </a>
-        <a href="/#solutions" className="hero-pill">
+        <a href={withBase('/#solutions')} className="hero-pill">
           <span className="hero-pill__label">Çözümleri Keşfet</span>
           <svg className="hero-pill__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M12 5v14m-6-6 6 6 6-6" />

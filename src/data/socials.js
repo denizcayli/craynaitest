@@ -1,6 +1,8 @@
-// Crayn AI's social profiles, as SocialLinks takes them. The profile addresses are not set yet.
+import { SITE } from '../lib/site.js'
+
+// Crayn AI's social profiles, as SocialLinks takes them.
 export const SOCIALS = [
-  { icon: 'instagram', label: 'Instagram', href: '#' },
-  { icon: 'x', label: 'Twitter', href: '#' },
-  { icon: 'linkedin', label: 'LinkedIn', href: '#' },
+  { icon: 'instagram', label: 'Instagram', href: SITE.instagram },
+  { icon: 'x', label: 'Twitter', href: SITE.x },
+  { icon: 'linkedin', label: 'LinkedIn', href: SITE.linkedin },
 ]

@@ -95,7 +95,10 @@
         1px 10px 8px rgba(0, 0, 0, 0.04),
         2px 20px 16px rgba(0, 0, 0, 0.07);
 }
-.glassy-btn:hover::after, .glassy-btn:focus-visible::after { opacity: 1; }
+.glassy-btn:focus-visible::after, .glassy-btn:active::after { opacity: 1; }
+@media (hover: hover) {
+    .glassy-btn:hover::after { opacity: 1; }
+}
 .glassy-btn:active {
     transform: scale(0.98);
     color: rgba(11, 15, 20, 0.8);
@@ -112,7 +115,7 @@
     background: linear-gradient(180deg, #fff 0%, #c9c9c9 9%, #a1a1a1 32%, #757575 73%, #fff 100%);
 }
 .glassy-box__face {
-    width: calc(21rem - 6px);
+    width: calc(min(21rem, 100vw - 2rem) - 6px);
     border-radius: calc(1.75rem - 3px);
     background: linear-gradient(150deg, #d6d6d6 0%, #e8e8e8 50%, #cdcdcd 100%);
 }

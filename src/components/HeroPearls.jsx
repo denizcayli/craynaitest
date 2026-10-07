@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { withBase } from '../lib/paths.js'
 
 // Layout is authored on a 1000 x 657 reference frame (the proportions of the original scene)
 // and scaled to the hero.
@@ -39,7 +40,7 @@ const PEARL_FRAGMENT = /* glsl */ `
 
 // Backdrop photo: the default "arch" image of the Unfocused+ Framer component by Jay Ji
 // (reveals.cool), whose defocus effect is recreated below.
-const BACKDROP_IMAGE = '/assets/hero/unfocused-arch.jpg'
+const BACKDROP_IMAGE = withBase('/assets/hero/unfocused-arch.jpg')
 const BACKDROP_COLOR = 0x0a0a0a
 
 // "Unfocused" finish over the whole backdrop: the picture is sharp at the far corner and gets

@@ -1,6 +1,7 @@
 import HandWrite from '../components/HandWrite.jsx'
 import PostRow from '../components/PostRow.jsx'
 import { POSTS } from '../data/posts.js'
+import { withBase } from '../lib/paths.js'
 
 export default function Blog() {
   return (
@@ -15,7 +16,7 @@ export default function Blog() {
               Yapay zeka, yazılım ve dijital dönüşüm üzerine en güncel yazılarımız.
             </p>
           </div>
-          <a href="/icerikler" className="magnet-pill magnet-pill--soft group shrink-0">
+          <a href={withBase('/icerikler')} className="magnet-pill magnet-pill--soft group shrink-0">
             <span className="magnet-pill__face">
               Tüm İçerikler
               <svg className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true">

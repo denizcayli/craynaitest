@@ -1,6 +1,7 @@
 import { LiquidMetal } from '@paper-design/shaders-react'
+import { withBase } from '../lib/paths.js'
 
-export const LOGO_URL = '/assets/brand/crayn-icon.png'
+export const LOGO_URL = withBase('/assets/brand/crayn-icon.png')
 
 // The Crayn icon in flowing liquid metal: the shader keeps only the logo's silhouette and fills
 // it with moving chrome. It fills its parent, which sets the size, edge to edge.

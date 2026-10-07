@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { withBase } from '../lib/paths.js'
 
 // Counts 0, 1, … count - 1 and round again, one step every `ms`, while `ref` is on screen.
 // With reduced motion it stays on `still`.
@@ -104,7 +105,7 @@ function Stream({ chips }) {
         </div>
       ))}
       <span className="absolute left-1/2 top-1/2 flex size-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-2xl bg-graphite shadow-[0_0_0_10px_rgba(230,235,242,0.9),0_20px_40px_-12px_rgba(11,15,20,0.7)]">
-        <img src="/assets/brand/crayn-icon.png" alt="" className="size-9" />
+        <img src={withBase('/assets/brand/crayn-icon.png')} alt="" className="size-9" />
       </span>
     </div>
   )

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { withBase } from '../lib/paths.js'
 
 // Row of light post cards. Every card shows its number, title and summary; the one being pointed
 // at (the first, when none is) widens to reveal its picture, washed in the brand blue.
@@ -26,7 +27,7 @@ export default function PostRow({ posts, startIndex = 0, headingLevel: Heading =
                 </p>
                 <div className="post-card__copy">
                   <Heading className="post-card__title">
-                    <a href={`/icerikler/${post.slug}`}>{post.title}</a>
+                    <a href={withBase(`/icerikler/${post.slug}`)}>{post.title}</a>
                   </Heading>
                   <p className="post-card__summary">{post.excerpt}</p>
                   <p className="post-card__more">

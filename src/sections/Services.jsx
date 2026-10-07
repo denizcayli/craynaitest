@@ -1,5 +1,6 @@
 import ExpandingCards from '../components/ExpandingCards.jsx'
 import HandWrite from '../components/HandWrite.jsx'
+import { withBase } from '../lib/paths.js'
 
 const photo = (id) => `https://images.unsplash.com/photo-${id}?q=80&w=1600&auto=format&fit=crop`
 
@@ -7,7 +8,7 @@ const SERVICES = [
   {
     label: 'ÇÖZÜMLER',
     title: 'Web Çözümleri',
-    href: '/hizmetler/web-cozumleri',
+    href: withBase('/hizmetler/web-cozumleri'),
     tags: ['UI/UX', 'Tasarım', 'Landing Page', 'Yazılım', 'Hosting'],
     text: 'Estetik tasarımı güçlü bir kullanıcı deneyimiyle birleştiriyoruz. Tasarımdan geliştirmeye kadar tüm süreçlerde, markanızın dijital dünyada daha görünür, etkili ve akılda kalıcı olmasını sağlıyoruz.',
     image: photo('1547658719-da2b51169166'), // code beside a landing-page design
@@ -16,7 +17,7 @@ const SERVICES = [
   {
     label: 'STRATEJİ',
     title: 'Dijital Pazarlama',
-    href: '/hizmetler/dijital-pazarlama',
+    href: withBase('/hizmetler/dijital-pazarlama'),
     tags: ['SEO', 'GEO', 'Google Ads ( SEM )', 'Performans Pazarlama'],
     text: 'Doğru hedef kitleye, doğru kanalda ve etkili bir mesajla ulaşmanız için dijital pazarlama süreçlerinizi stratejik bir yaklaşımla yönetiyoruz. Veri odaklı planlama ve yaratıcı içeriklerle markanızın dijital performansını güçlendiriyoruz.',
     image: photo('1460925895917-afdab827c52f'), // analytics dashboard
@@ -25,7 +26,7 @@ const SERVICES = [
   {
     label: 'YARATICILIK',
     title: 'Kreatif & İçerik',
-    href: '/hizmetler/kreatif-icerik',
+    href: withBase('/hizmetler/kreatif-icerik'),
     tags: ['Marka Kimliği', 'Video & Fotoğraf', 'Grafik Tasarım'],
     text: 'Markanızın hikayesini doğru ton, güçlü fikir ve yaratıcı içeriklerle anlatıyoruz. Hedef kitlenizin ilgisini çeken, marka kimliğinizi yansıtan ve dijitalde etki yaratan içeriklerle iletişiminizi güçlendiriyoruz.',
     image: photo('1561070791-2526d30994b5'), // colour swatches and design sketches
@@ -34,7 +35,7 @@ const SERVICES = [
   {
     label: 'ETKİLEŞİM',
     title: 'Sosyal Medya',
-    href: '/hizmetler/sosyal-medya',
+    href: withBase('/hizmetler/sosyal-medya'),
     tags: ['Topluluk Yönetimi', 'Kreatif İçerik', 'SM Reklamları'],
     text: 'Markanızın sosyal medyada görünür, anlaşılır ve akılda kalıcı olmasını sağlıyoruz. Hedef kitlenize uygun stratejiler ve yaratıcı içeriklerle etkileşimi güçlendiren, sürdürülebilir bir sosyal medya yönetimi sunuyoruz.',
     image: photo('1573152143286-0c422b4d2175'), // row of people scrolling on their phones
@@ -43,7 +44,7 @@ const SERVICES = [
   {
     label: 'GELECEK',
     title: 'AI Danışmanlığı',
-    href: '/hizmetler/ai-danismanligi',
+    href: withBase('/hizmetler/ai-danismanligi'),
     tags: ['AI Agent', 'LLM Entegrasyonu', 'Otomasyon'],
     text: 'Şirketlerin iş akışlarını analiz ederek süreçleri üretken yapay zeka entegrasyonu, akıllı yapay zeka ajanları ve otonom iş akışı orkestrasyonları ile geleceğe taşıyoruz.',
     image: photo('1655720828018-edd2daec9349'), // abstract network of connected nodes
@@ -52,7 +53,7 @@ const SERVICES = [
   {
     label: 'MÜHENDİSLİK',
     title: 'Özel Yazılım',
-    href: '/hizmetler/ozel-yazilim',
+    href: withBase('/hizmetler/ozel-yazilim'),
     tags: ['Özel API', 'Enterprise Web', 'Veri Yönetimi'],
     text: 'Hazır şablonlar kullanmıyoruz. Tamamen işletmenizin veri ve operasyon yapısına özel, ölçeklenebilir, güvenli ve yüksek performanslı yazılım altyapıları kuruyoruz.',
     image: photo('1461749280684-dccba630e2f6'), // source code

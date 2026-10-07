@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
+import { withBase } from '../lib/paths.js'
 
-const MODEL_URL = '/assets/robot/glowbot.glb'
+const MODEL_URL = withBase('/assets/robot/glowbot.glb')
 const DESKTOP = '(min-width: 1024px)'
 
 // Brand palette

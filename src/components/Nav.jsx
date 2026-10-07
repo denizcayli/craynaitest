@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { replayIntroOnNextLoad } from './Preloader.jsx'
 import { isDarkBehind } from '../lib/backdrop.js'
+import { withBase } from '../lib/paths.js'
 
 // Top bar with no background of its own: brand on the left, contact button and the menu toggle
 // on the right. Each side picks light or dark lettering from what is behind it, so it stays
@@ -45,18 +46,18 @@ export default function Nav() {
     <header ref={barRef} className="site-bar">
       <a
         ref={brandRef}
-        href="/"
+        href={withBase('/')}
         onClick={replayIntroOnNextLoad}
         aria-label="Crayn AI ana sayfa"
         className="site-bar__side site-bar__brand"
         data-on={brandOnDark ? 'dark' : 'light'}
       >
-        <img src="/assets/brand/crayn-icon.png" alt="" className="size-8 md:size-9" />
+        <img src={withBase('/assets/brand/crayn-icon.png')} alt="" className="size-8 md:size-9" />
         {/* The wordmark file is white; over light sections it is shown in black */}
-        <img src="/assets/brand/crayn-wordmark-white.png" alt="Crayn AI" className="site-bar__wordmark h-[10px] sm:h-[15px] md:h-[18px] w-auto" />
+        <img src={withBase('/assets/brand/crayn-wordmark-white.png')} alt="Crayn AI" className="site-bar__wordmark h-[10px] sm:h-[15px] md:h-[18px] w-auto" />
       </a>
       <div ref={actionsRef} className="site-bar__side flex items-center gap-2 md:gap-6" data-on={actionsOnDark ? 'dark' : 'light'}>
-        <a href="/talep" className="site-bar__contact group">
+        <a href={withBase('/talep')} className="site-bar__contact group">
           <span>Bize Ulaşın</span>
           <svg className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" aria-hidden="true">
             <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />

@@ -1,6 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./index.html', './src/**/*.{js,jsx}'],
+  // hover: styles only where there is a pointer to hover with, so they do not stick after a tap
+  future: { hoverOnlyWhenSupported: true },
   theme: {
     extend: {
       colors: {

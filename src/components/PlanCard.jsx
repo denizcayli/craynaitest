@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { isDarkBehind } from '../lib/backdrop.js'
 import { SERVICES } from '../data/services.js'
+import { withBase } from '../lib/paths.js'
 
 const CHIPS = ['Keşif görüşmesi', 'Yol haritası', 'Net teklif']
 const STEPS = ['İşiniz', 'İhtiyaç', 'İletişim']
@@ -15,7 +16,11 @@ const DONE_FOR = 6000
 const blank = (service) => ({ website: '', business: '', team: '', service, name: '', company: '', email: '', phone: '', note: '' })
 
 const EASE = 'ease-[cubic-bezier(0.22,1,0.36,1)]'
-const FIELD = 'w-full rounded-xl border border-silver bg-white px-3.5 py-2.5 text-sm text-graphite outline-none transition-colors placeholder:text-slate-brand/60 focus:border-graphite'
+const FIELD = 'w-full rounded-xl border border-silver bg-white px-3.5 py-2.5 text-base text-graphite outline-none lg:text-sm transition-colors placeholder:text-slate-brand/60 focus:border-graphite'
+// The open card's two widths; a phone's screen is narrower than either, so there it takes the
+// screen's width less a margin.
+const NARROW = 'w-[min(21rem,calc(100vw-2rem))]'
+const WIDE = 'w-[min(25rem,calc(100vw-2rem))]'
 const LABEL = 'mb-1.5 block text-sm font-bold'
 // The last field sits half under the form's footer until the step is scrolled; focusing it
 // brings it fully into view.
@@ -63,8 +68,8 @@ function Choices({ legend, name, options, value, onChange, columns = 'grid-cols-
 // turns it into a short three-step request form, which ends on a tick that draws itself before
 // the card starts over. The cross folds the card back down to the pill, which opens it again
 // where it was left. `service` is the service
-// the page is about, pre-selected in the form. Wide screens only, so it never covers a phone's
-// content.
+// the page is about, pre-selected in the form. On a phone it sits beside the round button, and
+// open it spans the screen and lies over that button.
 export default function PlanCard({ service = '' }) {
   const [shown, setShown] = useState(false)
   const [open, setOpen] = useState(false)
@@ -144,7 +149,7 @@ export default function PlanCard({ service = '' }) {
       ref={rootRef}
       aria-label="Görüşme planlayın"
       inert={!shown || atFooter}
-      className={`group fixed bottom-6 left-6 z-[44] hidden overflow-hidden shadow-[0_30px_60px_-25px_rgba(11,15,20,0.55)] transition-[width,border-radius,opacity,transform] duration-500 ${EASE} motion-reduce:transition-none lg:bottom-8 lg:left-8 lg:block ${!open ? (onDark ? 'plan-pill plan-pill--dark text-white' : 'plan-pill text-graphite') : metal ? 'glassy-box text-graphite' : 'border border-graphite/5 bg-white text-graphite'} ${open ? 'rounded-[1.75rem]' : 'rounded-[2rem]'} ${wide ? 'w-[25rem]' : open ? 'w-[21rem]' : ''} ${!shown ? 'translate-y-6 opacity-0' : atFooter ? 'opacity-0 !duration-1000' : 'opacity-100'}`}
+      className={`group fixed bottom-6 left-4 overflow-hidden shadow-[0_30px_60px_-25px_rgba(11,15,20,0.55)] transition-[width,border-radius,opacity,transform] duration-500 ${EASE} motion-reduce:transition-none lg:bottom-8 lg:left-8 ${open ? 'z-[46]' : 'z-[44]'} ${!open ? (onDark ? 'plan-pill plan-pill--dark text-white' : 'plan-pill text-graphite') : metal ? 'glassy-box text-graphite' : 'border border-graphite/5 bg-white text-graphite'} ${open ? 'rounded-[1.75rem]' : 'rounded-[2rem]'} ${wide ? WIDE : open ? NARROW : ''} ${!shown ? 'translate-y-6 opacity-0' : atFooter ? 'opacity-0 !duration-1000' : 'opacity-100'}`}
     >
       {/* Folded: a small pill that opens the card again. Every few seconds, and whenever it is
           pointed at, it widens while the logo rolls across to the right and its label shows in
@@ -155,7 +160,7 @@ export default function PlanCard({ service = '' }) {
             <span className="plan-pill__label">Demo planlayalım</span>
             <span className="flex shrink-0 -space-x-2" aria-hidden="true">
               <span className="plan-pill__logo relative z-[2] flex size-9 items-center justify-center">
-                <img src="/assets/brand/crayn-icon.png" alt="" className="size-8" />
+                <img src={withBase('/assets/brand/crayn-icon.png')} alt="" className="size-8" />
               </span>
               <span className={`plan-pill__extra relative z-[1] flex size-9 items-center justify-center rounded-full ${onDark ? 'bg-white/15' : 'bg-graphite/10'}`}><Stroke d={VIDEO} className="size-4" /></span>
               <span className={`plan-pill__extra flex size-9 items-center justify-center rounded-full ${onDark ? 'bg-white/15' : 'bg-graphite/10'}`}><Stroke d={CALENDAR} className="size-4" /></span>
@@ -175,7 +180,7 @@ export default function PlanCard({ service = '' }) {
               <Close onClick={() => setOpen(false)} className="absolute right-4 top-4" />
               <div className="flex justify-center -space-x-2" aria-hidden="true">
                 <span className="flex size-11 items-center justify-center rounded-full border-2 border-white bg-graphite">
-                  <img src="/assets/brand/crayn-icon.png" alt="" className="size-6" />
+                  <img src={withBase('/assets/brand/crayn-icon.png')} alt="" className="size-6" />
                 </span>
                 <span className="flex size-11 items-center justify-center rounded-full border-2 border-white bg-[#eef2f8]"><Stroke d={VIDEO} /></span>
                 <span className="flex size-11 items-center justify-center rounded-full border-2 border-white bg-[#eef2f8]"><Stroke d={CALENDAR} /></span>
@@ -197,7 +202,7 @@ export default function PlanCard({ service = '' }) {
           )}
 
           {view === 'form' && (
-            <form onSubmit={onSubmit} className="service-panel-in flex max-h-[min(36rem,calc(100vh-7rem))] w-[25rem] flex-col">
+            <form onSubmit={onSubmit} className={`service-panel-in flex max-h-[min(36rem,calc(100dvh-7rem))] ${WIDE} flex-col`}>
               <div className="flex items-center gap-3 px-5 pt-5">
                 <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-[#eef2f8]"><Stroke d={CALENDAR} /></span>
                 <span className="flex-1">
@@ -216,7 +221,7 @@ export default function PlanCard({ service = '' }) {
               </ol>
 
               {/* Keyed so each step eases in afresh */}
-              <div key={step} className="service-panel-in flex flex-1 scroll-py-4 flex-col gap-4 overflow-y-auto px-5 py-4">
+              <div key={step} data-lenis-prevent className="service-panel-in flex flex-1 scroll-py-4 flex-col gap-4 overflow-y-auto overscroll-contain px-5 py-4">
                 {step === 0 && (
                   <>
                     <div>
@@ -236,7 +241,7 @@ export default function PlanCard({ service = '' }) {
                       <p className="text-lg font-extrabold tracking-tight">Neye ihtiyacınız var?</p>
                       <p className="mt-0.5 text-sm text-slate-brand">Kabaca söylemeniz yeterli.</p>
                     </div>
-                    <Choices legend="Ekibiniz kaç kişi?" name="team" options={TEAM_SIZES} value={answers.team} onChange={answer('team')} columns="grid-cols-3" />
+                    <Choices legend="Ekibiniz kaç kişi?" name="team" options={TEAM_SIZES} value={answers.team} onChange={answer('team')} columns="grid-cols-2 sm:grid-cols-3" />
                     <Choices legend="Hangi hizmetle ilgileniyorsunuz?" name="service" options={SERVICES.map((item) => item.title)} value={answers.service} onChange={answer('service')} />
                   </>
                 )}
@@ -246,7 +251,7 @@ export default function PlanCard({ service = '' }) {
                       <p className="text-lg font-extrabold tracking-tight">Size nasıl ulaşalım?</p>
                       <p className="mt-0.5 text-sm text-slate-brand">Uygun bir zaman için size yazacağız.</p>
                     </div>
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-2 items-end gap-3">
                       <label>
                         <span className={LABEL}>Ad soyad</span>
                         <input type="text" {...field('name')} autoComplete="name" required className={FIELD} />
@@ -285,7 +290,7 @@ export default function PlanCard({ service = '' }) {
           )}
 
           {view === 'done' && (
-            <div role="status" className="service-panel-in w-[21rem] p-8 text-center">
+            <div role="status" className={`service-panel-in ${NARROW} p-8 text-center`}>
               <svg viewBox="0 0 52 52" className="plan-check mx-auto size-16" fill="none" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <circle cx="26" cy="26" r="24" className="stroke-crayn" />
                 <path d="M16 27l7 7 14-15" className="stroke-graphite" />

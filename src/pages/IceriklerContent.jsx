@@ -1,5 +1,6 @@
 import PostRow from '../components/PostRow.jsx'
 import { POSTS } from '../data/posts.js'
+import { withBase } from '../lib/paths.js'
 
 export default function IceriklerContent() {
   return (
@@ -8,7 +9,7 @@ export default function IceriklerContent() {
         <div className="absolute inset-0 bg-grid opacity-20 pointer-events-none" />
         <div className="max-w-7xl mx-auto px-6 md:px-8 py-20 relative z-10">
           <nav className="text-sm text-gray-500 mb-8">
-            <a href="/" className="hover:text-gray-300 transition-colors">
+            <a href={withBase('/')} className="hover:text-gray-300 transition-colors">
               Anasayfa
             </a>
             {' '}

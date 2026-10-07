@@ -4,6 +4,7 @@ import HandWrite from '../components/HandWrite.jsx'
 import ServiceTabs from '../components/ServiceTabs.jsx'
 import NotFound from './NotFound.jsx'
 import { SERVICES, findService } from '../data/services.js'
+import { withBase } from '../lib/paths.js'
 
 // How every engagement runs, whichever the service.
 const STEPS = [
@@ -28,7 +29,7 @@ export default function Hizmet() {
     tags: item.tags,
     image: item.features[0].image,
     color: '#111',
-    href: `/hizmetler/${item.slug}`,
+    href: withBase(`/hizmetler/${item.slug}`),
   }))
 
   return (
@@ -37,9 +38,9 @@ export default function Hizmet() {
         <div className="pointer-events-none absolute inset-0 bg-grid opacity-20" />
         <div className="relative z-10 mx-auto max-w-7xl px-6 py-20 md:px-8">
           <nav aria-label="Sayfa yolu" className="mb-8 text-sm text-gray-500">
-            <a href="/" className="transition-colors hover:text-gray-300">Anasayfa</a>
+            <a href={withBase('/')} className="transition-colors hover:text-gray-300">Anasayfa</a>
             <span className="mx-2 text-gray-700">/</span>
-            <a href="/hizmetler" className="transition-colors hover:text-gray-300">Hizmetler</a>
+            <a href={withBase('/hizmetler')} className="transition-colors hover:text-gray-300">Hizmetler</a>
             <span className="mx-2 text-gray-700">/</span>
             <span className="font-medium text-gray-300">{service.title}</span>
           </nav>
@@ -51,7 +52,7 @@ export default function Hizmet() {
               <li key={tag} className="rounded-full border border-white/15 px-4 py-1.5 text-sm font-medium text-gray-300">{tag}</li>
             ))}
           </ul>
-          <a href="/talep" className="magnet-pill magnet-pill--light mt-10">
+          <a href={withBase('/talep')} className="magnet-pill magnet-pill--light mt-10">
             <span className="magnet-pill__face">Bu hizmet için görüşelim</span>
           </a>
         </div>
@@ -73,7 +74,7 @@ export default function Hizmet() {
             features={service.features}
             label={`${service.title} başlıkları`}
             tags={service.tags}
-            action={{ label: 'Bu hizmet için görüşelim', href: '/talep' }}
+            action={{ label: 'Bu hizmet için görüşelim', href: withBase('/talep') }}
           />
         </div>
       </section>

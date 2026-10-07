@@ -1,4 +1,6 @@
 import Mullion from '../components/Mullion.jsx'
+import { withBase } from '../lib/paths.js'
+import { MAIL_HREF, PHONE_HREF, SITE } from '../lib/site.js'
 
 const photo = (id) => `https://images.unsplash.com/photo-${id}?q=80&w=1600&auto=format&fit=crop`
 
@@ -60,7 +62,7 @@ const ITEMS = [
   {
     id: 'iletisim',
     title: 'İletişim',
-    link: '/talep',
+    link: withBase('/talep'),
     image: photo('1521791136064-7986c2920216'), // handshake
     caption: (
       <>
@@ -68,13 +70,13 @@ const ITEMS = [
           Aklınızdaki süreci birkaç cümleyle anlatmanız yeterli; teknik bir hazırlık yapmanıza gerek yok. İlk görüşmede ihtiyacınızı dinliyor ve nereden başlanabileceğini birlikte netleştiriyoruz.
         </p>
         <p>
-          <a href="mailto:hello@crayn.ai" className="font-semibold text-graphite underline-offset-4 hover:underline">hello@crayn.ai</a>
+          <a href={MAIL_HREF} className="font-semibold text-graphite underline-offset-4 hover:underline">{SITE.email}</a>
           {' · '}
-          <a href="tel:05442407199" className="font-semibold text-graphite underline-offset-4 hover:underline">0544 240 71 99</a>
+          <a href={PHONE_HREF} className="font-semibold text-graphite underline-offset-4 hover:underline">{SITE.phone}</a>
         </p>
-        <p>Bilişim Vadisi, Teknoloji Geliştirme Bölgesi, Kocaeli / Türkiye</p>
+        <p>{SITE.address}</p>
         <p>
-          <a href="/talep" className="font-semibold text-graphite underline underline-offset-4">Talep formunu doldurun →</a>
+          <a href={withBase('/talep')} className="font-semibold text-graphite underline underline-offset-4">Talep formunu doldurun →</a>
         </p>
       </>
     ),

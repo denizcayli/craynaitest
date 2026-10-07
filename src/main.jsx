@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App.jsx'
+import { BASE } from './lib/paths.js'
 
 // Order matches the original site: Tailwind, Swiper, then the theme overrides.
 import './styles/index.css'
@@ -17,7 +18,7 @@ import './styles/glass-button.css'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename={BASE || '/'}>
       <App />
     </BrowserRouter>
   </StrictMode>,

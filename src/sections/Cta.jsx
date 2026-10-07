@@ -1,6 +1,7 @@
 import Faq from '../components/Faq.jsx'
 import Halo from '../components/Halo.jsx'
 import Typewriter from '../components/Typewriter.jsx'
+import { MAIL_HREF, SITE } from '../lib/site.js'
 
 const QUESTIONS = [
   {
@@ -53,7 +54,7 @@ export default function Cta() {
         <Faq items={QUESTIONS} className="w-full" />
         <p className="mt-10 text-center text-lg text-cloud/75">
           Aradığınızı bulamadınız mı? Bize yazın:{' '}
-          <a href="mailto:hello@crayn.ai" className="font-semibold text-cloud underline decoration-cloud/40 underline-offset-4 transition-colors hover:decoration-crayn">hello@crayn.ai</a>
+          <a href={MAIL_HREF} className="font-semibold text-cloud underline decoration-cloud/40 underline-offset-4 transition-colors hover:decoration-crayn">{SITE.email}</a>
         </p>
       </div>
     </section>

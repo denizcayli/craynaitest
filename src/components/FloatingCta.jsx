@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom'
 import LiquidLogo, { LOGO_URL } from './LiquidLogo.jsx'
 import { introFinished } from './Preloader.jsx'
 import { isDarkBehind } from '../lib/backdrop.js'
+import { withBase } from '../lib/paths.js'
 
 // Fixed round call-to-action in frosted glass: pops in on load, turns with the page scroll and
 // switches between light and dark lettering to stay readable over whatever is behind it.
@@ -44,10 +45,10 @@ export default function FloatingCta() {
   return (
     <a
       ref={ref}
-      href="/talep"
+      href={withBase('/talep')}
       aria-label="Proje başlat, bize ulaşın"
       style={{ rotate: 'var(--fab-rot, 0deg)' }}
-      className={`fixed bottom-6 right-4 lg:bottom-8 lg:right-8 z-[45] size-[76px] lg:size-[104px] rounded-full border shadow-lg backdrop-blur-md backdrop-saturate-150 transition-[filter,background-color,border-color,color] duration-300 hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crayn ${onDark ? 'border-white/30 bg-white/10 text-white' : 'border-graphite/15 bg-cloud/60 text-graphite'}`}
+      className={`fixed bottom-6 right-4 lg:bottom-8 lg:right-8 z-[45] size-[76px] lg:size-[104px] rounded-full border shadow-lg backdrop-blur-md backdrop-saturate-150 transition-[filter,background-color,border-color,color,transform] duration-300 hover:brightness-110 active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-crayn ${onDark ? 'border-white/30 bg-white/10 text-white' : 'border-graphite/15 bg-cloud/60 text-graphite'}`}
     >
       <span className="fab-pop relative block size-full">
         <svg viewBox="0 0 160 160" className="block size-full" aria-hidden="true">

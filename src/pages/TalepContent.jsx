@@ -1,4 +1,5 @@
 import RobotScene from '../components/RobotScene.jsx'
+import { withBase } from '../lib/paths.js'
 
 export default function TalepContent() {
   return (
@@ -42,7 +43,7 @@ export default function TalepContent() {
             <p id="talepSuccessMsg" className="text-gray-400 max-w-md mx-auto">
               Talebiniz alındı! Ekibimiz en kısa sürede sizinle iletişime geçecek.
             </p>
-            <a href="/" className="inline-block mt-8 tlp-accent font-semibold hover:underline">
+            <a href={withBase('/')} className="inline-block mt-8 tlp-accent font-semibold hover:underline">
               ← Ana sayfaya dön
             </a>
           </div>

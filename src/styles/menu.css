@@ -36,7 +36,15 @@
     transition: border-color 0.3s ease, background-color 0.3s ease;
 }
 @media (min-width: 768px) { .site-bar__contact { gap: 8px; padding: 10px 20px; font-size: 14px; } }
-.site-bar__contact:hover { border-color: color-mix(in srgb, currentColor 50%, transparent); background: color-mix(in srgb, currentColor 11%, transparent); }
+.site-bar__contact:active { border-color: color-mix(in srgb, currentColor 50%, transparent); background: color-mix(in srgb, currentColor 11%, transparent); }
+@media (hover: hover) {
+    .site-bar__contact:hover { border-color: color-mix(in srgb, currentColor 50%, transparent); background: color-mix(in srgb, currentColor 11%, transparent); }
+}
+/* The narrowest phones have no room for the arrow beside the brand */
+@media (max-width: 359px) {
+    .site-bar__contact { padding: 8px 10px; }
+    .site-bar__contact svg { display: none; }
+}
 
 .menu-toggle { display: flex; align-items: center; gap: 12px; color: inherit; user-select: none; }
 .menu-toggle:focus-visible { outline: none; }
@@ -54,7 +62,7 @@
     transition: opacity 0.3s;
 }
 @media (min-width: 640px) { .menu-toggle__label { display: grid; } }
-.menu-toggle:hover .menu-toggle__label, .menu-open .menu-toggle__label { opacity: 1; }
+.menu-open .menu-toggle__label { opacity: 1; }
 .menu-toggle__label span {
     grid-area: 1 / 1;
     white-space: nowrap;
@@ -78,7 +86,7 @@
     background: color-mix(in srgb, currentColor 7%, transparent);
     transition: background-color 0.35s ease;
 }
-.menu-toggle:hover .menu-toggle__icon, .menu-open .menu-toggle__icon { background: color-mix(in srgb, currentColor 14%, transparent); }
+.menu-toggle:active .menu-toggle__icon, .menu-open .menu-toggle__icon { background: color-mix(in srgb, currentColor 14%, transparent); }
 .menu-toggle__icon span {
     display: block;
     width: 18px;
@@ -88,7 +96,13 @@
     transition: transform 0.52s cubic-bezier(0.65, 0, 0.35, 1), width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .menu-toggle__icon span:last-child { width: 11px; }
-.menu-toggle:hover .menu-toggle__icon span:last-child, .menu-open .menu-toggle__icon span:last-child { width: 18px; }
+.menu-toggle:active .menu-toggle__icon span:last-child, .menu-open .menu-toggle__icon span:last-child { width: 18px; }
+/* Hovering is kept to screens with a pointer; after a tap it would stay stuck on */
+@media (hover: hover) {
+    .menu-toggle:hover .menu-toggle__label { opacity: 1; }
+    .menu-toggle:hover .menu-toggle__icon { background: color-mix(in srgb, currentColor 14%, transparent); }
+    .menu-toggle:hover .menu-toggle__icon span:last-child { width: 18px; }
+}
 .menu-open .menu-toggle__icon span:first-child { transform: translateY(3.5px) rotate(45deg); }
 .menu-open .menu-toggle__icon span:last-child { transform: translateY(-3.5px) rotate(-45deg); }
 
@@ -140,8 +154,11 @@
 }
 .menu-link-item__number { width: 2.2em; font-size: 0.26em; font-weight: 500; letter-spacing: 0.04em; color: rgba(203, 213, 225, 0.5); }
 /* Pointing at a link nudges it forward and dims the others */
-.menu-overlay__links:hover .menu-link-item { opacity: 0.35; }
-.menu-overlay__links .menu-link-item:hover, .menu-overlay__links .menu-link-item:focus-visible { opacity: 1; transform: translateX(16px); }
+.menu-overlay__links .menu-link-item:focus-visible, .menu-overlay__links .menu-link-item:active { opacity: 1; transform: translateX(16px); }
+@media (hover: hover) {
+    .menu-overlay__links:hover .menu-link-item { opacity: 0.35; }
+    .menu-overlay__links .menu-link-item:hover { opacity: 1; transform: translateX(16px); }
+}
 .menu-link-item:focus-visible, .menu-overlay__contact:focus-visible { outline: 2px solid currentColor; outline-offset: 6px; border-radius: 6px; }
 
 .menu-overlay__info { display: flex; flex-direction: column; gap: 32px; }

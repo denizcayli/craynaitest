@@ -267,11 +267,19 @@ body {
     transform: translateX(2em);
     transition: width 0.4s cubic-bezier(0.44, 0, 0.56, 1), margin 0.4s cubic-bezier(0.44, 0, 0.56, 1), transform 0.4s cubic-bezier(0.44, 0, 0.56, 1), opacity 0.3s ease;
 }
-.hero-pill:hover, .hero-pill:focus-visible {
+.hero-pill:focus-visible, .hero-pill:active {
     padding-inline: calc(var(--pad) - (var(--icon) + var(--gap)) / 2);
     border-color: #fff;
 }
-.hero-pill:hover .hero-pill__icon, .hero-pill:focus-visible .hero-pill__icon { width: var(--icon); margin-left: var(--gap); opacity: 1; transform: none; }
+.hero-pill:focus-visible .hero-pill__icon, .hero-pill:active .hero-pill__icon { width: var(--icon); margin-left: var(--gap); opacity: 1; transform: none; }
+/* Hovering is kept to screens with a pointer; after a tap it would stay stuck on */
+@media (hover: hover) {
+    .hero-pill:hover {
+        padding-inline: calc(var(--pad) - (var(--icon) + var(--gap)) / 2);
+        border-color: #fff;
+    }
+    .hero-pill:hover .hero-pill__icon { width: var(--icon); margin-left: var(--gap); opacity: 1; transform: none; }
+}
 .hero-pill:focus-visible { outline: 2px solid #7da3ff; outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) {
     .hero-pill, .hero-pill__icon { transition: none; }
@@ -306,7 +314,10 @@ body {
     opacity: 0;
     transition: opacity 300ms ease;
 }
-.magnet-pill:hover::before { opacity: 1; }
+.magnet-pill:active::before { opacity: 1; }
+@media (hover: hover) {
+    .magnet-pill:hover::before { opacity: 1; }
+}
 .magnet-pill:active .magnet-pill__face { filter: brightness(0.94); }
 .magnet-pill:focus-visible { outline: 2px solid rgba(125, 163, 255, 0.7); outline-offset: 3px; }
 .magnet-pill__face {
@@ -376,8 +387,12 @@ body {
     opacity: 0;
     transition: opacity 0.35s ease;
 }
-.magnet-pill--logo:hover .magnet-pill__face, .magnet-pill--logo:focus-visible .magnet-pill__face { color: #fff; text-shadow: 0 1px 2px rgba(11, 15, 20, 0.5); }
-.magnet-pill--logo:hover .magnet-pill__face::before, .magnet-pill--logo:focus-visible .magnet-pill__face::before { opacity: 1; }
+.magnet-pill--logo:focus-visible .magnet-pill__face, .magnet-pill--logo:active .magnet-pill__face { color: #fff; text-shadow: 0 1px 2px rgba(11, 15, 20, 0.5); }
+.magnet-pill--logo:focus-visible .magnet-pill__face::before, .magnet-pill--logo:active .magnet-pill__face::before { opacity: 1; }
+@media (hover: hover) {
+    .magnet-pill--logo:hover .magnet-pill__face { color: #fff; text-shadow: 0 1px 2px rgba(11, 15, 20, 0.5); }
+    .magnet-pill--logo:hover .magnet-pill__face::before { opacity: 1; }
+}
 /* Keeps Tailwind's .hidden working on it (the request wizard toggles its buttons) */
 .magnet-pill.hidden { display: none; }
 /* The folded request card: the same glass as the round button in the opposite corner — misted
@@ -427,10 +442,25 @@ body {
     transition: opacity 300ms ease, transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
     animation: plan-pill-label 11s ease 2s infinite;
 }
-.plan-pill:hover, .plan-pill:focus-within { width: var(--wide); animation: none; }
-.plan-pill:hover .plan-pill__logo, .plan-pill:focus-within .plan-pill__logo { transform: translateX(var(--roll)) rotate(360deg); animation: none; }
-.plan-pill:hover .plan-pill__extra, .plan-pill:focus-within .plan-pill__extra { opacity: 0; animation: none; }
-.plan-pill:hover .plan-pill__label, .plan-pill:focus-within .plan-pill__label { opacity: 1; transform: translate(0, -50%); transition-delay: 250ms; animation: none; }
+.plan-pill:focus-within { width: var(--wide); animation: none; }
+.plan-pill:focus-within .plan-pill__logo { transform: translateX(var(--roll)) rotate(360deg); animation: none; }
+.plan-pill:focus-within .plan-pill__extra { opacity: 0; animation: none; }
+.plan-pill:focus-within .plan-pill__label { opacity: 1; transform: translate(0, -50%); transition-delay: 250ms; animation: none; }
+/* A tap leaves hover stuck on, which would hold the pill wide; so only where there is a pointer */
+@media (hover: hover) {
+    .plan-pill:hover { width: var(--wide); animation: none; }
+    .plan-pill:hover .plan-pill__logo { transform: translateX(var(--roll)) rotate(360deg); animation: none; }
+    .plan-pill:hover .plan-pill__extra { opacity: 0; animation: none; }
+    .plan-pill:hover .plan-pill__label { opacity: 1; transform: translate(0, -50%); transition-delay: 250ms; animation: none; }
+}
+/* On the narrowest phones the wide pill would run into the round button, so it stays folded */
+@media (max-width: 359px) {
+    .plan-pill, .plan-pill:focus-within { width: var(--narrow); animation: none; }
+    .plan-pill .plan-pill__logo, .plan-pill .plan-pill__extra, .plan-pill .plan-pill__label { animation: none; }
+    .plan-pill:focus-within .plan-pill__logo { transform: none; }
+    .plan-pill:focus-within .plan-pill__extra { opacity: 1; }
+    .plan-pill:focus-within .plan-pill__label { opacity: 0; }
+}
 @keyframes plan-pill-width {
     0%, 4.9% { width: var(--narrow); }
     13.1%, 65.6% { width: var(--wide); }
@@ -474,7 +504,13 @@ body {
     animation: plan-pill-rim 11s linear 2s infinite;
 }
 /* Pointed at, the logo rolls out once, so the band runs out once with it */
-.plan-pill:hover::before, .plan-pill:focus-within::before { animation: plan-pill-rim-once 900ms cubic-bezier(0.65, 0, 0.35, 1) both; }
+.plan-pill:focus-within::before { animation: plan-pill-rim-once 900ms cubic-bezier(0.65, 0, 0.35, 1) both; }
+@media (hover: hover) {
+    .plan-pill:hover::before { animation: plan-pill-rim-once 900ms cubic-bezier(0.65, 0, 0.35, 1) both; }
+}
+@media (max-width: 359px) {
+    .plan-pill::before, .plan-pill:focus-within::before { animation: none; }
+}
 @keyframes plan-pill-rim {
     0%, 5.7% { background-position: 100% 0; opacity: 0; }
     8.2%, 14.7% { opacity: 1; }
@@ -598,7 +634,10 @@ body {
     color: #0b0f14;
     transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
 }
-.trust-arrow:hover { background: #0b0f14; border-color: #0b0f14; color: #f8fafc; }
+.trust-arrow:active { background: #0b0f14; border-color: #0b0f14; color: #f8fafc; }
+@media (hover: hover) {
+    .trust-arrow:hover { background: #0b0f14; border-color: #0b0f14; color: #f8fafc; }
+}
 .trust-arrow:focus-visible { outline: 2px solid #7da3ff; outline-offset: 2px; }
 
 /* Fixed-image window: the picture stays put while its frame scrolls. Touch browsers handle
@@ -830,4 +869,19 @@ body::after {
 }
 @media (prefers-reduced-motion: reduce) {
     .fx-typing span, .fx-stream { animation: none; }
+}
+
+/* TOUCH — there is no pointer to hover with, so a button answers the press itself: it sinks a
+   little under the finger and shows what hovering would have shown. The browser's own grey flash
+   on a tap is turned off so that it does not cover this. */
+@media (hover: none) {
+    a, button, label { -webkit-tap-highlight-color: transparent; }
+    .hero-pill { transition: padding 0.4s cubic-bezier(0.44, 0, 0.56, 1), border-color 0.4s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
+    .trust-arrow { transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
+    .site-bar__contact { transition: border-color 0.3s ease, background-color 0.3s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
+    .menu-toggle__icon { transition: background-color 0.35s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
+    .hero-pill:active, .trust-arrow:active, .site-bar__contact:active, .menu-toggle:active .menu-toggle__icon { transform: scale(0.95); }
+}
+@media (hover: none) and (prefers-reduced-motion: reduce) {
+    .hero-pill:active, .trust-arrow:active, .site-bar__contact:active, .menu-toggle:active .menu-toggle__icon { transform: none; }
 }

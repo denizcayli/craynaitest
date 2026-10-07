@@ -1,3 +1,5 @@
+import { withBase } from '../lib/paths.js'
+
 // Body blocks: a string is a paragraph, { h } a subheading and { list } a bulleted list.
 function Block({ block }) {
   if (typeof block === 'string') return <p>{block}</p>
@@ -13,9 +15,9 @@ export default function IcerikDetayContent({ post }) {
   return (
     <div className="max-w-3xl mx-auto px-6 md:px-8 py-16">
       <nav className="text-sm text-gray-500 mb-8">
-        <a href="/" className="hover:text-gray-300 transition-colors">Anasayfa</a>
+        <a href={withBase('/')} className="hover:text-gray-300 transition-colors">Anasayfa</a>
         <span className="mx-2 text-gray-700">/</span>
-        <a href="/icerikler" className="hover:text-gray-300 transition-colors">İçerikler</a>
+        <a href={withBase('/icerikler')} className="hover:text-gray-300 transition-colors">İçerikler</a>
         <span className="mx-2 text-gray-700">/</span>
         <span className="text-gray-300 font-medium">{post.title}</span>
       </nav>
@@ -35,7 +37,7 @@ export default function IcerikDetayContent({ post }) {
         {post.body.map((block, index) => <Block key={index} block={block} />)}
       </div>
       <div className="mt-14 pt-8 border-t border-[#1a1a1a]">
-        <a href="/icerikler" className="inline-flex items-center gap-2 text-crayn hover:text-white font-medium transition-colors">
+        <a href={withBase('/icerikler')} className="inline-flex items-center gap-2 text-crayn hover:text-white font-medium transition-colors">
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
           </svg>

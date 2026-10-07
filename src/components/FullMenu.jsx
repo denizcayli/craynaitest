@@ -1,16 +1,7 @@
 import AuroraFlow from './AuroraFlow.jsx'
 import SocialLinks from './SocialLinks.jsx'
 import { SOCIALS } from '../data/socials.js'
-
-const LINKS = [
-  { label: 'Ana Sayfa', href: '/#' },
-  { label: 'Hakkımızda', href: '/hakkimizda' },
-  { label: 'Crayn AI Nedir?', href: '/#services' },
-  { label: 'Üretken AI', href: '/#services' },
-  { label: 'Hizmetler', href: '/#services' },
-  { label: 'Neler Yapıyoruz', href: '/#solutions' },
-  { label: 'İletişim', href: '/talep' },
-]
+import { MAIL_HREF, MAIN_MENU, PHONE_HREF, SITE } from '../lib/site.js'
 
 // Full-screen menu: a dark sheet with slow ribbons of light flowing behind it, opening in a
 // circle from the toggle. The links come
@@ -23,7 +14,7 @@ export default function FullMenu() {
       <div className="menu-overlay__body">
         <nav aria-label="Ana menü">
           <ul className="menu-overlay__links">
-            {LINKS.map((link, index) => (
+            {MAIN_MENU.map((link, index) => (
               <li key={link.label} className="menu-list-item">
                 <a href={link.href} className="menu-link-item">
                   <span className="menu-link-item__number">{String(index + 1).padStart(2, '0')}</span>
@@ -36,19 +27,19 @@ export default function FullMenu() {
         <div className="menu-overlay__info">
           <div className="menu-info-item">
             <span className="menu-overlay__caption">İletişim Kurun</span>
-            <a href="mailto:hello@crayn.ai" className="menu-overlay__contact text-2xl md:text-3xl font-bold">
-              hello@crayn.ai
+            <a href={MAIL_HREF} className="menu-overlay__contact text-2xl md:text-3xl font-bold">
+              {SITE.email}
               <span className="menu-overlay__underline" />
             </a>
-            <a href="tel:05442407199" className="menu-overlay__contact mt-2 text-base font-semibold text-white/60">
-              0544 240 71 99
+            <a href={PHONE_HREF} className="menu-overlay__contact mt-2 text-base font-semibold text-white/60">
+              {SITE.phone}
               <span className="menu-overlay__underline" />
             </a>
           </div>
           <div className="menu-info-item">
             <span className="menu-overlay__caption">Merkez</span>
             <p className="max-w-[250px] leading-relaxed text-white/60">
-              Bilişim Vadisi, Teknoloji Geliştirme Bölgesi, Kocaeli / Türkiye
+              {SITE.address}
             </p>
           </div>
           <div className="menu-info-item">
@@ -56,7 +47,7 @@ export default function FullMenu() {
           </div>
         </div>
       </div>
-      <p className="menu-overlay__note menu-info-item">© 2026 Crayn AI</p>
+      <p className="menu-overlay__note menu-info-item">{SITE.menuNote}</p>
     </div>
   )
 }
