@@ -16,6 +16,21 @@ export function initTalepForm() {
   const formError = document.getElementById('talepFormError')
 
   const stepEl = (n) => form.querySelector(`.talep-step[data-step="${n}"]`)
+  const card = form.closest('.tlp-glass')
+  const phone = window.matchMedia('(pointer: coarse)').matches
+  const root = document.documentElement
+  let centring
+  let leaving
+
+  // Scrolls so that `element` sits in the middle of what the keyboard leaves of the screen.
+  // Left alone when it is near enough already, so the page does not shift at every tap.
+  const centre = (element, always) => {
+    const view = window.visualViewport
+    const height = view?.height ?? window.innerHeight
+    const box = element.getBoundingClientRect()
+    const off = box.top + box.height / 2 - ((view?.offsetTop ?? 0) + height / 2)
+    if (always || Math.abs(off) > height * 0.2) window.scrollBy({ top: off, behavior: 'smooth' })
+  }
 
   const tag = document.getElementById('stepTag')
 
@@ -84,10 +99,20 @@ export function initTalepForm() {
     e.preventDefault()
     if (!validateStep(current)) return
 
+    // The card keeps the height the form gave it and shows the confirmation in its middle;
+    // otherwise the page would shrink and leave the visitor looking at the footer.
+    if (card) {
+      card.style.minHeight = `${card.offsetHeight}px`
+      card.classList.add('is-done')
+    }
+    document.activeElement?.blur()
     form.classList.add('hidden')
     document.getElementById('talepProgress')?.classList.add('hidden')
     const success = document.getElementById('talepSuccess')
     if (success) success.classList.remove('hidden')
+    // Once the keyboard has gone, the card is brought to the middle of the screen.
+    clearTimeout(centring)
+    if (card) centring = setTimeout(() => centre(card, true), phone ? 400 : 0)
   }, { signal })
 
   const clearOnFill = (e) => {
@@ -122,17 +147,37 @@ export function initTalepForm() {
     levelSteps()
   }, { signal })
 
-  // On a phone the keyboard covers half the screen, so the field being filled in is brought to
-  // the middle of what is left, once the keyboard has come up.
-  if (window.matchMedia('(pointer: coarse)').matches) {
-    let centring
+  // On a phone the keyboard covers half the screen. While a field is being typed in, the form
+  // has the page to itself (styles/talep.css puts the footer away and leaves room under the
+  // card), and the field is brought to the middle of what the keyboard leaves, once it is up.
+  if (phone) {
+    const typed = 'input:not([type="radio"]):not([type="checkbox"]), textarea'
     form.addEventListener('focusin', (e) => {
-      if (!e.target.matches('input:not([type="radio"]):not([type="checkbox"]), textarea, select')) return
+      if (!e.target.matches(typed)) return
+      clearTimeout(leaving)
+      root.classList.add('talep-typing')
       clearTimeout(centring)
-      centring = setTimeout(() => e.target.scrollIntoView({ block: 'center', behavior: 'smooth' }), 300)
+      centring = setTimeout(() => centre(e.target), 350)
     }, { signal })
-    signal.addEventListener('abort', () => clearTimeout(centring))
+    // Moving straight on to the next field must not bring the footer back in between.
+    form.addEventListener('focusout', () => {
+      clearTimeout(leaving)
+      leaving = setTimeout(() => {
+        root.classList.remove('talep-typing')
+        if (!card || form.classList.contains('hidden')) return
+        // With the keyboard gone, the whole card is shown again: in the middle of the screen,
+        // or, where it is taller than the screen, with its consent box and buttons in view.
+        const box = card.getBoundingClientRect()
+        if (box.height <= window.innerHeight - 32) centre(card)
+        else window.scrollBy({ top: box.bottom - (window.innerHeight - 16), behavior: 'smooth' })
+      }, 300)
+    }, { signal })
   }
+  signal.addEventListener('abort', () => {
+    clearTimeout(centring)
+    clearTimeout(leaving)
+    root.classList.remove('talep-typing')
+  })
 
   showStep(1)
 

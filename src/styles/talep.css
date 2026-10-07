@@ -8,6 +8,13 @@
 
 /* Kart */
 .tlp-glass { position:relative; padding:26px 32px; border-radius:20px; border:1px solid rgba(255,255,255,.1); background:rgba(11,15,20,.66); -webkit-backdrop-filter:blur(24px); backdrop-filter:blur(24px); box-shadow:0 24px 60px -20px rgba(0,0,0,.6); }
+/* After a request is sent the card keeps its height (lib/talepForm.js) and the confirmation sits
+   in its middle */
+.tlp-glass.is-done { display:flex; flex-direction:column; justify-content:center; }
+/* While a field is being typed in on a phone, the form has the page to itself: the footer is
+   put away and there is room under the card for its last fields to come up above the keyboard */
+.talep-typing footer { display:none; }
+.talep-typing .tlp-wrap { padding-bottom:50vh; }
 /* Ust kenardaki ince isik cizgisi */
 .tlp-shimmer { position:absolute; top:0; left:44px; right:44px; height:1px; background:linear-gradient(90deg, transparent, rgba(125,163,255,.7), transparent); }
 @media (max-width:480px) { .tlp-glass { padding:28px 20px 24px; } }
