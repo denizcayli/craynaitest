@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import LiquidLogo, { LOGO_URL } from './LiquidLogo.jsx'
 import { introFinished } from './Preloader.jsx'
-import { isDarkBehind } from '../lib/backdrop.js'
+import { isDarkBehind, watchBackdrop } from '../lib/backdrop.js'
 import { withBase } from '../lib/paths.js'
 
 // Fixed round call-to-action in frosted glass: pops in on load, turns with the page scroll and
@@ -21,22 +21,25 @@ export default function FloatingCta() {
     if (!el) return
     const turns = !window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
+    // The turn follows the scroll frame by frame; the look behind the button does not need to.
     let frame = 0
-    const update = () => {
+    const turn = () => {
       frame = 0
-      if (turns) el.style.setProperty('--fab-rot', `${window.scrollY * 0.08}deg`)
+      el.style.setProperty('--fab-rot', `${window.scrollY * 0.08}deg`)
+    }
+    const schedule = () => { if (!frame) frame = requestAnimationFrame(turn) }
+    if (turns) {
+      turn()
+      window.addEventListener('scroll', schedule, { passive: true })
+    }
+    const unwatch = watchBackdrop(() => {
       const rect = el.getBoundingClientRect()
       setOnDark(isDarkBehind(rect.left + rect.width / 2, rect.top + rect.height / 2, el))
-    }
-    const schedule = () => { if (!frame) frame = requestAnimationFrame(update) }
-
-    update()
-    window.addEventListener('scroll', schedule, { passive: true })
-    window.addEventListener('resize', schedule)
+    })
     return () => {
       window.removeEventListener('scroll', schedule)
-      window.removeEventListener('resize', schedule)
       if (frame) cancelAnimationFrame(frame)
+      unwatch()
     }
   }, [hidden])
 

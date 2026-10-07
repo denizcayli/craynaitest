@@ -453,13 +453,11 @@ body {
     .plan-pill:hover .plan-pill__extra { opacity: 0; animation: none; }
     .plan-pill:hover .plan-pill__label { opacity: 1; transform: translate(0, -50%); transition-delay: 250ms; animation: none; }
 }
-/* On the narrowest phones the wide pill would run into the round button, so it stays folded */
-@media (max-width: 359px) {
-    .plan-pill, .plan-pill:focus-within { width: var(--narrow); animation: none; }
-    .plan-pill .plan-pill__logo, .plan-pill .plan-pill__extra, .plan-pill .plan-pill__label { animation: none; }
-    .plan-pill:focus-within .plan-pill__logo { transform: none; }
-    .plan-pill:focus-within .plan-pill__extra { opacity: 1; }
-    .plan-pill:focus-within .plan-pill__label { opacity: 0; }
+/* On a phone the pill is a size smaller and never widens: the whole show plays inside the
+   short pill, the logo rolling over to the arrow and a one-word label showing behind it. */
+@media (max-width: 639px) {
+    .plan-pill, .plan-pill:focus-within { --narrow: 8.75rem; --wide: 8.75rem; --roll: 3.25rem; width: var(--narrow); animation: none; }
+    .plan-pill__label { left: 0.9rem; font-size: 13px; }
 }
 @keyframes plan-pill-width {
     0%, 4.9% { width: var(--narrow); }
@@ -507,9 +505,6 @@ body {
 .plan-pill:focus-within::before { animation: plan-pill-rim-once 900ms cubic-bezier(0.65, 0, 0.35, 1) both; }
 @media (hover: hover) {
     .plan-pill:hover::before { animation: plan-pill-rim-once 900ms cubic-bezier(0.65, 0, 0.35, 1) both; }
-}
-@media (max-width: 359px) {
-    .plan-pill::before, .plan-pill:focus-within::before { animation: none; }
 }
 @keyframes plan-pill-rim {
     0%, 5.7% { background-position: 100% 0; opacity: 0; }

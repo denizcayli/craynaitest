@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { replayIntroOnNextLoad } from './Preloader.jsx'
-import { isDarkBehind } from '../lib/backdrop.js'
+import { isDarkBehind, watchBackdrop } from '../lib/backdrop.js'
 import { withBase } from '../lib/paths.js'
 
 // Top bar with no background of its own: brand on the left, contact button and the menu toggle
@@ -21,24 +21,16 @@ export default function Nav() {
       const rect = element.getBoundingClientRect()
       return isDarkBehind(rect.left + rect.width / 2, rect.top + rect.height / 2, barRef.current)
     }
-    let frame = 0
     const update = () => {
-      frame = 0
       setBrandOnDark(centreIsDark(brandRef.current))
       setActionsOnDark(centreIsDark(actionsRef.current))
     }
-    const schedule = () => { if (!frame) frame = requestAnimationFrame(update) }
-
-    update()
+    const unwatch = watchBackdrop(update)
     // Pages finish laying out a moment after the route changes.
     const settle = setTimeout(update, 400)
-    window.addEventListener('scroll', schedule, { passive: true })
-    window.addEventListener('resize', schedule)
     return () => {
       clearTimeout(settle)
-      window.removeEventListener('scroll', schedule)
-      window.removeEventListener('resize', schedule)
-      if (frame) cancelAnimationFrame(frame)
+      unwatch()
     }
   }, [pathname])
 

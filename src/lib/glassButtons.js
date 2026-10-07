@@ -157,8 +157,9 @@ function createPainter() {
 
 // Gives every matching button, now and later, its glass surface. Returns a cleanup function.
 export function initGlassButtons() {
-  const painter = createPainter()
-  if (!painter) return () => {}
+  // The painter and its frame loop only exist while the page has such a button.
+  let painter = null
+  let unsupported = false
 
   const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches
   const buttons = new Map()
@@ -173,7 +174,9 @@ export function initGlassButtons() {
   })
 
   const adopt = (element) => {
-    if (buttons.has(element)) return
+    if (buttons.has(element) || unsupported) return
+    painter ??= createPainter()
+    if (!painter) { unsupported = true; return }
     const surface = document.createElement('canvas')
     surface.className = 'glass-btn__fx'
     surface.setAttribute('aria-hidden', 'true')
@@ -217,8 +220,11 @@ export function initGlassButtons() {
       // A re-render can replace a button's children; put its surface back.
       else if (state.surface.parentNode !== element) element.prepend(state.surface)
     }
+    if (buttons.size && !frame) {
+      last = performance.now()
+      frame = requestAnimationFrame(tick)
+    }
   }
-  scan()
   // Pages and cards come and go; pick up their buttons as they appear.
   let scanQueued = false
   const watcher = new MutationObserver(() => {
@@ -231,7 +237,7 @@ export function initGlassButtons() {
   let frame = 0
   let last = performance.now()
   const tick = (now) => {
-    frame = requestAnimationFrame(tick)
+    frame = buttons.size ? requestAnimationFrame(tick) : 0
     const delta = Math.min((now - last) / 1000, 0.1)
     last = now
     const ratio = Math.min(window.devicePixelRatio || 1, MAX_DPR)
@@ -255,7 +261,7 @@ export function initGlassButtons() {
       state.painted = true
     }
   }
-  frame = requestAnimationFrame(tick)
+  scan()
 
   return () => {
     cancelAnimationFrame(frame)
@@ -263,6 +269,6 @@ export function initGlassButtons() {
     watcher.disconnect()
     visibility.disconnect()
     for (const element of [...buttons.keys()]) release(element)
-    painter.dispose()
+    painter?.dispose()
   }
 }

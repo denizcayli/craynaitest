@@ -1,7 +1,10 @@
 import { useEffect, useRef } from 'react'
 
 // Rendered at half resolution and stretched: the ribbons are soft, so it is not noticeable.
+// Phones draw it smaller still and at half the frame rate; the flow is slow enough to take it.
 const RESOLUTION = 0.5
+const PHONE_RESOLUTION = 0.35
+const PHONE_FRAME = 30
 const MAX_DPR = 2
 const LAYERS = 84
 
@@ -135,6 +138,7 @@ export default function AuroraFlow({ background = '#f6f4ef', color1 = '#2fd3f2',
     window.addEventListener('pointermove', onPointerMove, { passive: true })
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const phone = window.matchMedia('(pointer: coarse)').matches
     let frame = 0
     let last = -1
     let clock = 0
@@ -144,11 +148,12 @@ export default function AuroraFlow({ background = '#f6f4ef', color1 = '#2fd3f2',
       // Hidden (display: none) or collapsed: stop until the size comes back.
       if (!width || !height) { frame = 0; last = -1; return }
       frame = reducedMotion ? 0 : requestAnimationFrame(render)
+      if (phone && last >= 0 && now - last < PHONE_FRAME) return
       const dt = last < 0 ? 0 : Math.min((now - last) / 1000, 0.05)
       last = now
       clock = (clock + dt * speed) % 3600
 
-      const dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR) * RESOLUTION
+      const dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR) * (phone ? PHONE_RESOLUTION : RESOLUTION)
       const bw = Math.max(1, Math.round(width * dpr))
       const bh = Math.max(1, Math.round(height * dpr))
       if (canvas.width !== bw || canvas.height !== bh) {

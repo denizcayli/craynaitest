@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState } from 'react'
-import { isDarkBehind } from '../lib/backdrop.js'
+import { isDarkBehind, watchBackdrop } from '../lib/backdrop.js'
 import { SERVICES } from '../data/services.js'
 import { withBase } from '../lib/paths.js'
 
@@ -94,21 +94,10 @@ export default function PlanCard({ service = '' }) {
 
   useEffect(() => {
     const root = rootRef.current
-    let frame = 0
-    const update = () => {
-      frame = 0
+    return watchBackdrop(() => {
       const box = root.getBoundingClientRect()
       setOnDark(isDarkBehind(box.left + 24, box.bottom - 24, root))
-    }
-    const schedule = () => { if (!frame) frame = requestAnimationFrame(update) }
-    update()
-    window.addEventListener('scroll', schedule, { passive: true })
-    window.addEventListener('resize', schedule)
-    return () => {
-      window.removeEventListener('scroll', schedule)
-      window.removeEventListener('resize', schedule)
-      if (frame) cancelAnimationFrame(frame)
-    }
+    })
   }, [])
 
   useEffect(() => {
@@ -153,20 +142,22 @@ export default function PlanCard({ service = '' }) {
     >
       {/* Folded: a small pill that opens the card again. Every few seconds, and whenever it is
           pointed at, it widens while the logo rolls across to the right and its label shows in
-          the space left behind; then the logo rolls home. The motion is in theme.css. */}
+          the space left behind; then the logo rolls home. On a phone it is smaller and keeps its
+          width: the logo rolls within it. The motion is in theme.css. */}
       <div inert={open} className={fold(!open)}>
         <div className="overflow-hidden">
-          <button type="button" aria-expanded={open} aria-controls={id} onClick={() => setOpen(true)} className="relative flex w-full items-center p-2.5 text-left">
-            <span className="plan-pill__label">Demo planlayalım</span>
+          <button type="button" aria-expanded={open} aria-controls={id} aria-label="Demo planlayalım" onClick={() => setOpen(true)} className="relative flex w-full items-center p-2 text-left sm:p-2.5">
+            {/* A phone's pill is too short for the whole label */}
+            <span className="plan-pill__label" aria-hidden="true">Demo<span className="hidden sm:inline"> planlayalım</span></span>
             <span className="flex shrink-0 -space-x-2" aria-hidden="true">
-              <span className="plan-pill__logo relative z-[2] flex size-9 items-center justify-center">
-                <img src={withBase('/assets/brand/crayn-icon.png')} alt="" className="size-8" />
+              <span className="plan-pill__logo relative z-[2] flex size-8 items-center justify-center sm:size-9">
+                <img src={withBase('/assets/brand/crayn-icon.png')} alt="" className="size-7 sm:size-8" />
               </span>
-              <span className={`plan-pill__extra relative z-[1] flex size-9 items-center justify-center rounded-full ${onDark ? 'bg-white/15' : 'bg-graphite/10'}`}><Stroke d={VIDEO} className="size-4" /></span>
-              <span className={`plan-pill__extra flex size-9 items-center justify-center rounded-full ${onDark ? 'bg-white/15' : 'bg-graphite/10'}`}><Stroke d={CALENDAR} className="size-4" /></span>
+              <span className={`plan-pill__extra relative z-[1] flex size-8 items-center justify-center rounded-full sm:size-9 ${onDark ? 'bg-white/15' : 'bg-graphite/10'}`}><Stroke d={VIDEO} className="size-4" /></span>
+              <span className={`plan-pill__extra flex size-8 items-center justify-center rounded-full sm:size-9 ${onDark ? 'bg-white/15' : 'bg-graphite/10'}`}><Stroke d={CALENDAR} className="size-4" /></span>
             </span>
             <span className="flex-1" />
-            <span className={`flex size-9 shrink-0 items-center justify-center rounded-full border transition-colors ${onDark ? 'border-white/40 group-hover:bg-white group-hover:text-graphite' : 'border-graphite/30 group-hover:bg-graphite group-hover:text-cloud'}`}>
+            <span className={`flex size-8 shrink-0 items-center justify-center rounded-full border transition-colors sm:size-9 ${onDark ? 'border-white/40 group-hover:bg-white group-hover:text-graphite' : 'border-graphite/30 group-hover:bg-graphite group-hover:text-cloud'}`}>
               <Stroke d="M5 12h13M13 7l5 5-5 5" className="size-4" />
             </span>
           </button>

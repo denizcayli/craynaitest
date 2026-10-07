@@ -48,7 +48,15 @@ const BACKDROP_COLOR = 0x0a0a0a
 // at the blurred end and film grain on top. Settings follow the effect's defaults; the caller
 // scales blur and grain between 0 (in focus) and 1 (fully unfocused).
 const UNFOCUS = { blur: 200, angle: 45, origin: [0, 0.5], dispersion: 0.2, noise: 1 }
-const UNFOCUS_SAMPLES = 16
+
+// What the scene may cost. The unfocus pass reads the picture `samples` times for every pixel it
+// draws, so the number of pixels is capped: `pixels` is the most the canvas may hold and
+// `ratio` the most device pixels per CSS pixel. The picture is blurred, so the difference does
+// not show. `detail` is how finely the pearls are divided; they are reshaped on every frame.
+const QUALITY = {
+  desktop: { samples: 16, pixels: 3.7e6, ratio: 2, detail: 10 },
+  phone: { samples: 10, pixels: 0.9e6, ratio: 1.5, detail: 6 },
+}
 
 const UNFOCUS_VERTEX = /* glsl */ `
   varying vec2 vUv;
@@ -58,7 +66,7 @@ const UNFOCUS_VERTEX = /* glsl */ `
   }
 `
 
-const UNFOCUS_FRAGMENT = /* glsl */ `
+const unfocusFragment = (samples) => /* glsl */ `
   uniform sampler2D uScene;
   uniform vec2 uPanel;
   uniform float uBlur;
@@ -68,7 +76,7 @@ const UNFOCUS_FRAGMENT = /* glsl */ `
   uniform float uNoise;
   varying vec2 vUv;
 
-  const int SAMPLES = ${UNFOCUS_SAMPLES};
+  const int SAMPLES = ${samples};
   const float TAU = 6.28318530718;
 
   float rand(vec2 co) { return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453); }
@@ -124,8 +132,9 @@ export default function HeroPearls({ revealRef, blurRef }) {
     ]).then(([THREE, { ImprovedNoise }, { mergeVertices }]) => {
       if (disposed) return
 
-      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+      const quality = window.matchMedia('(pointer: coarse)').matches ? QUALITY.phone : QUALITY.desktop
+      // Everything is drawn through the unfocus pass, which smooths edges anyway.
+      const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true })
       // The shaders write display colours directly.
       renderer.outputColorSpace = THREE.LinearSRGBColorSpace
       mount.appendChild(renderer.domElement)
@@ -155,7 +164,7 @@ export default function HeroPearls({ revealRef, blurRef }) {
       const target = new THREE.WebGLRenderTarget(1, 1)
       const unfocus = new THREE.ShaderMaterial({
         vertexShader: UNFOCUS_VERTEX,
-        fragmentShader: UNFOCUS_FRAGMENT,
+        fragmentShader: unfocusFragment(quality.samples),
         uniforms: {
           uScene: { value: target.texture },
           uPanel: { value: new THREE.Vector2(1, 1) },
@@ -192,7 +201,7 @@ export default function HeroPearls({ revealRef, blurRef }) {
 
       const disposables = []
       const blobs = BLOBS.map((config) => {
-        const geometry = sphere(16)
+        const geometry = sphere(quality.detail)
         const mesh = new THREE.Mesh(geometry, pearlMaterial(config.warm))
         scene.add(mesh)
         disposables.push(geometry, mesh.material)
@@ -225,6 +234,7 @@ export default function HeroPearls({ revealRef, blurRef }) {
         camera.top = height / 2
         camera.bottom = -height / 2
         camera.updateProjectionMatrix()
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, quality.ratio, Math.sqrt(quality.pixels / (width * height))))
         renderer.setSize(width, height)
         const cover = Math.max(width / photoAspect, height)
         photo.scale.set(cover * photoAspect, cover, 1)
@@ -248,6 +258,8 @@ export default function HeroPearls({ revealRef, blurRef }) {
       window.addEventListener('pointermove', onPointerMove)
 
       let focus = 1
+      // What the heading was last told, so that it is only told again when something has moved.
+      const told = []
       const noise = new ImprovedNoise()
       const draw = (seconds) => {
         for (const blob of blobs) {
@@ -288,10 +300,16 @@ export default function HeroPearls({ revealRef, blurRef }) {
             ...blobs.map((blob) => [blob.px, blob.py, blob.pr * 0.82]),
             [spotlight.x, spotlight.y, pointer.seen ? SPOTLIGHT.radius * view.size : 0],
           ]
+          // Whole pixels: the pearls drift slowly, so most frames change nothing and the heading
+          // is left alone instead of being repainted.
           spots.forEach(([x, y, radius], index) => {
-            reveal.style.setProperty(`--x${index}`, `${x - (rect.left - heroRect.left)}px`)
-            reveal.style.setProperty(`--y${index}`, `${y - (rect.top - heroRect.top)}px`)
-            reveal.style.setProperty(`--r${index}`, `${radius}px`)
+            const spot = `${Math.round(x - (rect.left - heroRect.left))},${Math.round(y - (rect.top - heroRect.top))},${Math.round(radius)}`
+            if (told[index] === spot) return
+            told[index] = spot
+            const [sx, sy, sr] = spot.split(',')
+            reveal.style.setProperty(`--x${index}`, `${sx}px`)
+            reveal.style.setProperty(`--y${index}`, `${sy}px`)
+            reveal.style.setProperty(`--r${index}`, `${sr}px`)
           })
         }
 
